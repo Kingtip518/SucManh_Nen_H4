@@ -75,7 +75,7 @@ tr:last-child td{border-bottom:none}
   <div class="mau" id="mau" hidden>Đây là dữ liệu mẫu từ phân tích chiều 04/11. Trang sẽ tự thay bằng dữ liệu thật sau lần chạy đầu tiên.</div>
 
   <section>
-    <h2>Sức mạnh tiền tệ hôm nay (% từ giá mở cửa ngày)</h2>
+    <h2 id="tieuDeSucManh">Sức mạnh tiền tệ (% từ giá mở cửa ngày)</h2>
     <div class="sm" id="sucManh"></div>
   </section>
 
@@ -92,7 +92,7 @@ tr:last-child td{border-bottom:none}
   <section>
     <h2>Mô hình có nhưng bị loại</h2>
     <div class="bang"><table>
-      <thead><tr><th>Cặp</th><th>Hướng mô hình</th><th>Mô hình</th><th>Nến</th><th>Chênh lệch</th><th>Lý do</th></tr></thead>
+      <thead><tr><th>Cặp</th><th>Hướng mô hình</th><th>Mô hình</th><th>Nến đóng lúc</th><th>Chênh lệch</th><th>Lý do</th></tr></thead>
       <tbody id="loai"></tbody>
     </table></div>
   </section>
@@ -101,7 +101,7 @@ tr:last-child td{border-bottom:none}
     <h2>Cách chọn lệnh</h2>
     <ol>
       <li>Tìm mô hình nến đảo chiều trên <span id="cdGan">3</span> nến 4 giờ vừa đóng, nằm ở đỉnh hoặc đáy của <span id="cdDinh">12</span> nến gần nhất, và giá chưa phá qua đỉnh hoặc đáy của mô hình.</li>
-      <li>Đồng mua phải mạnh hơn đồng bán theo sức mạnh hôm nay, chênh lệch ít nhất <span id="cdChenh">0,15</span>%.</li>
+      <li>Đồng mua phải mạnh hơn đồng bán, chênh lệch ít nhất <span id="cdChenh">0,15</span>%. Trong 8 giờ đầu ngày giao dịch (05:00–13:00 giờ Việt Nam), sức mạnh đo theo 24 giờ gần nhất. Sau đó đo từ giá mở cửa ngày.</li>
       <li>Cắt lỗ đặt ngoài đỉnh hoặc đáy mô hình. Mục tiêu là đỉnh hoặc đáy của <span id="cdMuc">20</span> nến 4 giờ gần nhất. Giá chờ là mức nên đợi giá hồi về để lời/lỗ đạt 1:1,5.</li>
     </ol>
     <p>Nến lấy theo giờ sàn MT5 phổ biến (0 giờ sàn = 5 giờ chiều New York), có thể lệch vài pip so với sàn của anh. Đây là công cụ tham khảo, không phải lời khuyên đầu tư.</p>
@@ -126,7 +126,7 @@ function veLenh(ds){
   if(!ds.length){$('lenh').innerHTML='<div class="trong">Nến 4 giờ vừa đóng không có cặp nào đạt cả hai điều kiện. Chờ nến tiếp theo.</div>';return;}
   $('lenh').innerHTML=ds.map((d,k)=>`<article class="the">
     <div class="tren"><span class="huong ${d.huong}">${d.huong}</span><span class="cap">${d.cap}</span><span class="stt">#${k+1}</span></div>
-    <div class="mh">${d.mo_hinh} · nến ${d.gio_nen}</div>
+    <div class="mh">${d.mo_hinh} · nến đóng ${d.gio_nen}</div>
     <div class="cs">
       <div><span>Giá lúc quét</span><span class="so">${d.gia}</span></div>
       <div><span>Chênh sức mạnh</span><span class="so">${so(d.chenh.toFixed(2))}</span></div>
@@ -146,8 +146,9 @@ async function tai(){
     const r=await fetch('data.json?t='+Date.now(),{cache:'no-store'});
     if(!r.ok) throw new Error(r.status);
     const d=await r.json();
-    $('trangthai').textContent=`Cập nhật ${d.cap_nhat} · nến 4 giờ vừa đóng ${d.nen_4_gio_dong} (giờ Việt Nam) · đọc được ${d.so_cap_doc_duoc}/28 cặp`;
+    $('trangthai').textContent=`Cập nhật ${d.cap_nhat} · nến 4 giờ vừa đóng lúc ${d.nen_4_gio_dong} (giờ Việt Nam) · đọc được ${d.so_cap_doc_duoc}/28 cặp`;
     $('mau').hidden=!d.du_lieu_mau;
+    $('tieuDeSucManh').textContent='Sức mạnh tiền tệ (% '+(d.cach_do||'từ giá mở cửa ngày')+')';
     veSucManh(d.suc_manh); veLenh(d.dat); veLoai(d.loai||[]);
     $('khuCanhBao').hidden=!(d.canh_bao&&d.canh_bao.length);
     $('canhBao').innerHTML=(d.canh_bao||[]).map(c=>`<li>${c}</li>`).join('');
