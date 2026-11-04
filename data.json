@@ -1,0 +1,165 @@
+{
+ "du_lieu_mau": true,
+ "cap_nhat": "17:20 04/11/2026",
+ "nen_4_gio_dong": "13:00 04/11",
+ "ma_nen": 0,
+ "so_cap_doc_duoc": 28,
+ "suc_manh": [
+  {
+   "tien": "NZD",
+   "phan_tram": 0.49
+  },
+  {
+   "tien": "AUD",
+   "phan_tram": 0.18
+  },
+  {
+   "tien": "EUR",
+   "phan_tram": 0.16
+  },
+  {
+   "tien": "GBP",
+   "phan_tram": 0.1
+  },
+  {
+   "tien": "CHF",
+   "phan_tram": 0.06
+  },
+  {
+   "tien": "CAD",
+   "phan_tram": -0.08
+  },
+  {
+   "tien": "JPY",
+   "phan_tram": -0.34
+  },
+  {
+   "tien": "USD",
+   "phan_tram": -0.56
+  }
+ ],
+ "dat": [
+  {
+   "cap": "NZD/JPY",
+   "goc": "NZD",
+   "dinh": "JPY",
+   "huong": "MUA",
+   "mo_hinh": "xuyên đâm",
+   "gio_nen": "09:00 04/11",
+   "chenh": 0.83,
+   "gia": 89.296,
+   "cat_lo": 87.761,
+   "muc_tieu": 89.618,
+   "loi_lo": 0.2,
+   "gia_cho": 88.504
+  },
+  {
+   "cap": "NZD/CAD",
+   "goc": "NZD",
+   "dinh": "CAD",
+   "huong": "MUA",
+   "mo_hinh": "nhấn chìm tăng",
+   "gio_nen": "13:00 04/11",
+   "chenh": 0.57,
+   "gia": 0.78641,
+   "cat_lo": 0.7804,
+   "muc_tieu": 0.79011,
+   "loi_lo": 0.6,
+   "gia_cho": 0.78428
+  },
+  {
+   "cap": "AUD/JPY",
+   "goc": "AUD",
+   "dinh": "JPY",
+   "huong": "MUA",
+   "mo_hinh": "xuyên đâm",
+   "gio_nen": "09:00 04/11",
+   "chenh": 0.52,
+   "gia": 111.119,
+   "cat_lo": 109.52,
+   "muc_tieu": 111.565,
+   "loi_lo": 0.3,
+   "gia_cho": 110.338
+  },
+  {
+   "cap": "USD/CAD",
+   "goc": "USD",
+   "dinh": "CAD",
+   "huong": "BÁN",
+   "mo_hinh": "nhấn chìm giảm + đỉnh nhíp",
+   "gio_nen": "13:00 04/11",
+   "chenh": 0.48,
+   "gia": 1.3947,
+   "cat_lo": 1.40173,
+   "muc_tieu": 1.3938,
+   "loi_lo": 0.1,
+   "gia_cho": 1.39856
+  },
+  {
+   "cap": "GBP/NZD",
+   "goc": "GBP",
+   "dinh": "NZD",
+   "huong": "BÁN",
+   "mo_hinh": "sao băng",
+   "gio_nen": "09:00 04/11",
+   "chenh": 0.39,
+   "gia": 2.39295,
+   "cat_lo": 2.40904,
+   "muc_tieu": 2.37422,
+   "loi_lo": 1.2,
+   "gia_cho": 2.39511
+  }
+ ],
+ "loai": [
+  {
+   "cap": "USD/CHF",
+   "huong": "MUA",
+   "mo_hinh": "búa",
+   "gio_nen": "13:00 04/11",
+   "chenh": -0.62,
+   "ly_do": "Sức mạnh ngày ngược chiều mô hình"
+  },
+  {
+   "cap": "EUR/CAD",
+   "huong": "BÁN",
+   "mo_hinh": "sao băng",
+   "gio_nen": "09:00 04/11",
+   "chenh": -0.24,
+   "ly_do": "Sức mạnh ngày ngược chiều mô hình"
+  },
+  {
+   "cap": "CAD/CHF",
+   "huong": "MUA",
+   "mo_hinh": "búa",
+   "gio_nen": "13:00 04/11",
+   "chenh": -0.14,
+   "ly_do": "Sức mạnh ngày ngược chiều mô hình"
+  },
+  {
+   "cap": "GBP/AUD",
+   "huong": "BÁN",
+   "mo_hinh": "mây đen",
+   "gio_nen": "09:00 04/11",
+   "chenh": 0.08,
+   "ly_do": "Chênh lệch sức mạnh quá nhỏ"
+  },
+  {
+   "cap": "AUD/CHF",
+   "huong": "MUA",
+   "mo_hinh": "xuyên đâm",
+   "gio_nen": "09:00 04/11",
+   "chenh": 0.12,
+   "ly_do": "Chênh lệch sức mạnh quá nhỏ"
+  }
+ ],
+ "canh_bao": [
+  "Đang mua NZD trong 3 lệnh. Nếu NZD quay đầu, các lệnh này cùng lỗ. Nên chia nhỏ khối lượng.",
+  "Đang bán JPY trong 2 lệnh. Nếu JPY bật tăng, các lệnh này cùng lỗ. Nên chia nhỏ khối lượng."
+ ],
+ "cai_dat": {
+  "so_nen_dinh_day": 12,
+  "so_nen_gan_nhat": 3,
+  "chenh_toi_thieu": 0.15,
+  "so_nen_muc_tieu": 20
+ }
+}
