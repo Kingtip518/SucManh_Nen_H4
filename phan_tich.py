@@ -10,7 +10,11 @@ Khi có nến 4 giờ mới đóng, gửi báo cáo về Telegram.
 """
 import json
 import os
+import subprocess
+import sys
+import tempfile
 import time
+import uuid
 import urllib.parse
 import urllib.request
 from datetime import datetime, timedelta, timezone
@@ -22,6 +26,7 @@ SO_NEN_GAN_NHAT_XET = 3     # Xét mô hình trong bao nhiêu nến 4 giờ vừ
 CHENH_LECH_TOI_THIEU = 0.15  # Chênh lệch sức mạnh tối thiểu giữa 2 đồng (đơn vị %)
 SO_NEN_TIM_MUC_TIEU = 20    # Mục tiêu = đỉnh/đáy của bao nhiêu nến 4 giờ gần nhất
 SO_GIO_DAU_NGAY = 8         # Trong bao nhiêu giờ đầu ngày giao dịch thì đo sức mạnh theo 24 giờ gần nhất
+SO_NEN_TREN_BIEU_DO = 45    # Số nến 4 giờ vẽ trên ảnh biểu đồ gửi Telegram và trên trang web
 # ---------------------------------------------------------------
 
 TIEN = ["EUR", "GBP", "AUD", "NZD", "USD", "CAD", "CHF", "JPY"]
@@ -182,32 +187,34 @@ def quet_mo_hinh(da_dong, dang_chay, gia):
         sau = n[i + 1:] + dang_chay
 
         # Mô hình tăng: vùng nến tạo mô hình (ít nhất 3 nến) phải chứa đáy thấp nhất của cửa sổ
-        ten, day = [], None
+        ten, day, so_nen = [], None, 1
         for (tm, so) in mo_hinh_tang(n, i, a):
             d = min(b["l"] for b in n[i - max(3, so) + 1:i + 1])
             if d <= min(b["l"] for b in cua_so):
                 ten.append(tm)
+                so_nen = max(so_nen, so)
                 day = d if day is None else min(day, d)
         if ten and gia > day and all(b["l"] > day for b in sau):
             cat_lo = day - 0.1 * a
             muc_tieu = max(b["h"] for b in n[-SO_NEN_TIM_MUC_TIEU:])
             if muc_tieu <= gia:
                 muc_tieu = gia + 2 * (gia - cat_lo)
-            return {"huong": 1, "mo_hinh": " + ".join(ten), "gio_nen": gio_vn(n[i]["dong"]),
+            return {"huong": 1, "mo_hinh": " + ".join(ten), "gio_nen": gio_vn(n[i]["dong"]), "chi_so": i, "so_nen": so_nen,
                     "cat_lo": cat_lo, "muc_tieu": muc_tieu}
 
-        ten, dinh = [], None
+        ten, dinh, so_nen = [], None, 1
         for (tm, so) in mo_hinh_giam(n, i, a):
             d = max(b["h"] for b in n[i - max(3, so) + 1:i + 1])
             if d >= max(b["h"] for b in cua_so):
                 ten.append(tm)
+                so_nen = max(so_nen, so)
                 dinh = d if dinh is None else max(dinh, d)
         if ten and gia < dinh and all(b["h"] < dinh for b in sau):
             cat_lo = dinh + 0.1 * a
             muc_tieu = min(b["l"] for b in n[-SO_NEN_TIM_MUC_TIEU:])
             if muc_tieu >= gia:
                 muc_tieu = gia - 2 * (cat_lo - gia)
-            return {"huong": -1, "mo_hinh": " + ".join(ten), "gio_nen": gio_vn(n[i]["dong"]),
+            return {"huong": -1, "mo_hinh": " + ".join(ten), "gio_nen": gio_vn(n[i]["dong"]), "chi_so": i, "so_nen": so_nen,
                     "cat_lo": cat_lo, "muc_tieu": muc_tieu}
     return None
 
@@ -287,11 +294,21 @@ def phan_tich(lay_nen=lay_nen_gio, bay_gio=None):
             gia_cho = (th["muc_tieu"] + 1.5 * th["cat_lo"]) / 2.5
             if (th["huong"] == 1 and th["cat_lo"] < gia_cho < gia) or (th["huong"] == -1 and gia < gia_cho < th["cat_lo"]):
                 dong["gia_cho"] = round(gia_cho, so)
+        # Nến 4 giờ gần nhất để vẽ biểu đồ (gồm cả nến đang chạy)
+        tat_ca = da_dong + dang_chay
+        bat_dau = max(0, len(tat_ca) - SO_NEN_TREN_BIEU_DO)
+        dong["nen"] = [[b["dong"], round(b["o"], so), round(b["h"], so), round(b["l"], so), round(b["c"], so)]
+                       for b in tat_ca[bat_dau:]]
+        dong["chi_so_mh"] = th["chi_so"] - bat_dau
+        dong["so_le"] = so
+        dong["so_nen_mh"] = th["so_nen"]
         if chenh >= CHENH_LECH_TOI_THIEU:
             dat.append(dong)
         else:
             dong["ly_do"] = ("Sức mạnh ngày ngược chiều mô hình" if chenh < 0
                              else "Chênh lệch sức mạnh quá nhỏ")
+            for khoa in ("nen", "chi_so_mh", "so_nen_mh"):
+                dong.pop(khoa, None)
             loai.append(dong)
     dat.sort(key=lambda d: -d["chenh"])
     loai.sort(key=lambda d: d["chenh"])
@@ -319,41 +336,186 @@ def phan_tich(lay_nen=lay_nen_gio, bay_gio=None):
     }
 
 
-def soan_tin(kq):
-    sm = " | ".join(f"{x['tien']} {x['phan_tram']:+.2f}" for x in kq["suc_manh"])
-    t = [f"<b>NẾN 4 GIỜ + SỨC MẠNH NGÀY</b>",
-         f"Nến 4 giờ vừa đóng lúc {kq['nen_4_gio_dong']} (giờ Việt Nam)", "",
-         f"<b>Sức mạnh</b> ({kq['cach_do']}, mạnh → yếu)", sm, ""]
+def so(gia, so_le):
+    return f"{gia:.{so_le}f}"
+
+
+def soan_tin_tom_tat(kq):
+    """Tin nhắn đầu tiên: sức mạnh và danh sách lệnh, dòng ngắn cho dễ đọc trên điện thoại."""
+    lon_nhat = max(abs(x["phan_tram"]) for x in kq["suc_manh"]) or 1
+    dong_sm = []
+    for x in kq["suc_manh"]:
+        dai = round(abs(x["phan_tram"]) / lon_nhat * 8)
+        thanh = ("█" if x["phan_tram"] >= 0 else "░") * max(dai, 1)
+        dong_sm.append(f"{x['tien']} {x['phan_tram']:+.2f}  {thanh}")
+    t = ["📊 <b>BÁO CÁO NẾN 4 GIỜ</b>",
+         f"Nến đóng lúc <b>{kq['nen_4_gio_dong']}</b>", "",
+         f"<b>Sức mạnh tiền tệ</b> ({kq['cach_do']})",
+         "<pre>" + "\n".join(dong_sm) + "</pre>"]
     if not kq["dat"]:
-        t.append("Không có cặp nào đạt cả hai điều kiện.")
+        t += ["Không có cặp nào đạt đủ hai điều kiện:", "mô hình nến đảo chiều + sức mạnh thuận chiều."]
     else:
-        t.append("<b>LỆNH ĐỀ XUẤT</b>")
+        t.append(f"<b>{len(kq['dat'])} lệnh đề xuất</b> (ảnh chi tiết ở tin sau)")
         for k, d in enumerate(kq["dat"], 1):
-            t.append(f"{k}. <b>{d['huong']} {d['cap']}</b>: {d['mo_hinh']} (nến đóng {d['gio_nen']})")
-            t.append(f"   Chênh sức mạnh {d['chenh']:.2f} | Giá {d['gia']}")
-            t.append(f"   Cắt lỗ {d['cat_lo']} | Mục tiêu {d['muc_tieu']} | Lời/lỗ 1:{d['loi_lo']}")
-            if d.get("gia_cho"):
-                t.append(f"   Nên chờ giá hồi về {d['gia_cho']} (lời/lỗ 1:1,5)")
+            dau = "🟢" if d["huong"] == "MUA" else "🔴"
+            t.append(f"{dau} <b>{d['huong']} {d['cap']}</b> · {d['mo_hinh']}")
     if kq["canh_bao"]:
-        t += ["", "<b>Lưu ý</b>"] + [f"• {c}" for c in kq["canh_bao"]]
+        t += ["", "⚠️ <b>Lưu ý</b>"]
+        for c in kq["canh_bao"]:
+            t.append("• " + c.split(". Nếu")[0] + " → nên chia nhỏ khối lượng")
     if DIA_CHI_WEB:
-        t += ["", f"Xem chi tiết: {DIA_CHI_WEB}"]
-    tin = "\n".join(t)
-    return tin[:3900]
+        t += ["", f'<a href="{DIA_CHI_WEB}">Mở trang Bàn Ghép Cặp H4</a>']
+    return "\n".join(t)[:4000]
 
 
-def gui_telegram(noi_dung):
+def soan_chu_thich_anh(k, d):
+    """Chú thích đi kèm ảnh biểu đồ của từng lệnh."""
+    sl = d["so_le"]
+    vao = d.get("gia_cho") or d["gia"]
+    loi_lo = abs(d["muc_tieu"] - vao) / abs(vao - d["cat_lo"]) if vao != d["cat_lo"] else 0
+    dau = "🟢" if d["huong"] == "MUA" else "🔴"
+    cach_vao = "Lệnh chờ" if d.get("gia_cho") else "Vào ngay"
+    bang = ([f"Giá hiện tại {so(d['gia'], sl):>10}"] if d.get("gia_cho") else []) + [
+            f"{cach_vao:<12} {so(vao, sl):>10}",
+            f"Cắt lỗ       {so(d['cat_lo'], sl):>10}",
+            f"Mục tiêu     {so(d['muc_tieu'], sl):>10}",
+            f"Lời/lỗ       {('1 : ' + format(loi_lo, '.1f')):>10}"]
+    t = [f"{dau} <b>{k}. {d['huong']} {d['cap']}</b>",
+         f"{d['mo_hinh'].capitalize()} · nến đóng {d['gio_nen']}",
+         "<pre>" + "\n".join(bang) + "</pre>",
+         f"Chênh sức mạnh {d['goc']}–{d['dinh']}: {abs(d['chenh']):.2f}"]
+    if d.get("gia_cho"):
+        t.append(f"Giá đang xa mô hình, chờ hồi về {so(vao, sl)} để đạt lời/lỗ 1 : 1,5.")
+    return "\n".join(t)[:1000]
+
+
+def chuan_bi_matplotlib():
+    try:
+        import matplotlib  # noqa: F401
+    except ImportError:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", "matplotlib"])
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    return plt
+
+
+def ve_bieu_do(d, duong_dan):
+    """Vẽ nến 4 giờ kèm vùng vào lệnh, cắt lỗ, mục tiêu. Lưu ảnh PNG."""
+    plt = chuan_bi_matplotlib()
+    from matplotlib.patches import Rectangle
+    nen = d["nen"]
+    sl = d["so_le"]
+    vao = d.get("gia_cho") or d["gia"]
+    mua = d["huong"] == "MUA"
+    XANH, DO, LAM, VANG, XAM, CHU = "#16a06a", "#d84a3c", "#2563c9", "#e8a317", "#8a96a3", "#1c2733"
+
+    fig, ax = plt.subplots(figsize=(8, 5.4), dpi=140)
+    fig.patch.set_facecolor("white")
+    ax.set_facecolor("#fbfcfd")
+    n = len(nen)
+    for k, (_, o, h, l, c) in enumerate(nen):
+        mau = XANH if c >= o else DO
+        ax.plot([k, k], [l, h], color=mau, linewidth=1, zorder=2)
+        ax.add_patch(Rectangle((k - 0.32, min(o, c)), 0.64, max(abs(c - o), 1e-9),
+                               facecolor=mau, edgecolor=mau, zorder=3))
+
+    # Vùng lời và lỗ tính từ nến mô hình sang phải
+    x0, x1 = d["chi_so_mh"] + 0.5, n + 3
+    ax.add_patch(Rectangle((x0, min(vao, d["cat_lo"])), x1 - x0, abs(vao - d["cat_lo"]),
+                           facecolor=DO, alpha=0.10, zorder=1))
+    ax.add_patch(Rectangle((x0, min(vao, d["muc_tieu"])), x1 - x0, abs(vao - d["muc_tieu"]),
+                           facecolor=XANH, alpha=0.10, zorder=1))
+    # Đánh dấu nến mô hình
+    i = d["chi_so_mh"]
+    ax.axvspan(i - d.get("so_nen_mh", 1) + 0.5, i + 0.5, color=VANG, alpha=0.22, zorder=0)
+    cum = nen[max(0, i - d.get("so_nen_mh", 1) + 1):i + 1]
+    y_mui = min(x[3] for x in cum) if mua else max(x[2] for x in cum)
+    lech = (max(x[2] for x in nen) - min(x[3] for x in nen)) * 0.07
+    ax.annotate(d["mo_hinh"], xy=(i - (d.get("so_nen_mh", 1) - 1) / 2, y_mui), xytext=(i - (d.get("so_nen_mh", 1) - 1) / 2, y_mui - lech if mua else y_mui + lech),
+                ha="center", va="top" if mua else "bottom", fontsize=9, color=CHU, fontweight="bold",
+                arrowprops=dict(arrowstyle="->", color=CHU, lw=1.2), zorder=5)
+
+    # Các vạch giá
+    duong = [(d["muc_tieu"], XANH, "Mục tiêu", "-"),
+             (vao, LAM, "Lệnh chờ" if d.get("gia_cho") else "Vào lệnh", "-"),
+             (d["cat_lo"], DO, "Cắt lỗ", "-")]
+    if d.get("gia_cho"):
+        duong.append((d["gia"], XAM, "Giá hiện tại", ":"))
+    for y, mau, _, kieu in duong:
+        ax.plot([x0 if mau != XAM else -0.5, x1], [y, y], color=mau, lw=1.6, ls=kieu, zorder=4)
+
+    # Nhãn bên phải, tránh chồng lên nhau
+    y_min = min(min(x[3] for x in nen), d["cat_lo"], d["muc_tieu"])
+    y_max = max(max(x[2] for x in nen), d["cat_lo"], d["muc_tieu"])
+    khoang = (y_max - y_min) * 0.065
+    nhan = sorted(duong, key=lambda x: x[0])
+    vi_tri = []
+    for y, *_ in nhan:
+        vi_tri.append(max(y, vi_tri[-1] + khoang) if vi_tri else y)
+    for (y, mau, ten, _), yv in zip(nhan, vi_tri):
+        ax.text(n + 3.3, yv, f"{ten}\n{so(y, sl)}", color="white", fontsize=8.5, va="center", ha="left",
+                fontweight="bold", bbox=dict(boxstyle="round,pad=0.3", fc=mau, ec="none"), clip_on=False, zorder=6)
+
+    ax.set_xlim(-1, n + 3)
+    ax.set_ylim(y_min - khoang * 1.2, max(y_max, vi_tri[-1]) + khoang * 1.2)
+    buoc = max(1, n // 6)
+    ax.set_xticks(range(0, n, buoc))
+    ax.set_xticklabels([datetime.fromtimestamp(nen[k][0], GIO_VN).strftime("%d/%m\n%H:%M") for k in range(0, n, buoc)],
+                       fontsize=8, color=XAM)
+    ax.yaxis.tick_left()
+    ax.tick_params(axis="y", labelsize=8, colors=XAM)
+    ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda v, _: so(v, sl)))
+    ax.grid(axis="y", color="#e6eaee", lw=0.8)
+    for canh in ("top", "right"):
+        ax.spines[canh].set_visible(False)
+    for canh in ("left", "bottom"):
+        ax.spines[canh].set_color("#d5dbe1")
+    ax.set_title(f"{d['huong']} {d['cap']}  ·  khung 4 giờ  ·  {d['mo_hinh']}", loc="left",
+                 fontsize=12, fontweight="bold", color=XANH if mua else DO)
+    fig.subplots_adjust(left=0.1, right=0.83, top=0.92, bottom=0.12)
+    fig.savefig(duong_dan)
+    plt.close(fig)
+
+
+def goi_telegram(phuong_thuc, du_lieu, tep=None):
+    url = f"https://api.telegram.org/bot{MA_BOT}/{phuong_thuc}"
+    if tep is None:
+        req = urllib.request.Request(url, data=urllib.parse.urlencode(du_lieu).encode())
+    else:
+        ranh_gioi = uuid.uuid4().hex
+        than = b""
+        for k, v in du_lieu.items():
+            than += (f"--{ranh_gioi}\r\nContent-Disposition: form-data; name=\"{k}\"\r\n\r\n{v}\r\n").encode()
+        with open(tep, "rb") as f:
+            anh = f.read()
+        than += (f"--{ranh_gioi}\r\nContent-Disposition: form-data; name=\"photo\"; filename=\"bieu_do.png\"\r\n"
+                 "Content-Type: image/png\r\n\r\n").encode() + anh + f"\r\n--{ranh_gioi}--\r\n".encode()
+        req = urllib.request.Request(url, data=than,
+                                     headers={"Content-Type": f"multipart/form-data; boundary={ranh_gioi}"})
+    try:
+        with urllib.request.urlopen(req, timeout=30) as r:
+            print(f"Telegram {phuong_thuc}:", r.status)
+    except Exception as loi:
+        print(f"Telegram {phuong_thuc} lỗi:", loi)
+
+
+def gui_bao_cao(kq):
     if not MA_BOT or not MA_CHAT:
         print("Chưa có mã bot hoặc mã chat Telegram, bỏ qua gửi tin.")
         return
-    du_lieu = urllib.parse.urlencode({"chat_id": MA_CHAT, "text": noi_dung, "parse_mode": "HTML",
-                                      "disable_web_page_preview": "true"}).encode()
-    req = urllib.request.Request(f"https://api.telegram.org/bot{MA_BOT}/sendMessage", data=du_lieu)
-    try:
-        with urllib.request.urlopen(req, timeout=20) as r:
-            print("Đã gửi Telegram:", r.status)
-    except Exception as loi:
-        print("Gửi Telegram lỗi:", loi)
+    goi_telegram("sendMessage", {"chat_id": MA_CHAT, "text": soan_tin_tom_tat(kq), "parse_mode": "HTML",
+                                 "disable_web_page_preview": "true"})
+    thu_muc = tempfile.mkdtemp()
+    for k, d in enumerate(kq["dat"][:8], 1):
+        duong_dan = os.path.join(thu_muc, f"{k}.png")
+        try:
+            ve_bieu_do(d, duong_dan)
+            goi_telegram("sendPhoto", {"chat_id": MA_CHAT, "caption": soan_chu_thich_anh(k, d),
+                                       "parse_mode": "HTML"}, tep=duong_dan)
+        except Exception as loi:
+            print(f"Vẽ hoặc gửi ảnh {d['cap']} lỗi:", loi)
+            goi_telegram("sendMessage", {"chat_id": MA_CHAT, "text": soan_chu_thich_anh(k, d), "parse_mode": "HTML"})
 
 
 def main():
@@ -373,7 +535,7 @@ def main():
     co_nen_moi = kq["ma_nen"] != cu.get("ma_nen")
     print(f"Nến 4 giờ đóng: {kq['nen_4_gio_dong']} | nến mới: {co_nen_moi} | lệnh đạt: {len(kq['dat'])}")
     if co_nen_moi or LUON_GUI:
-        gui_telegram(soan_tin(kq))
+        gui_bao_cao(kq)
 
 
 if __name__ == "__main__":
