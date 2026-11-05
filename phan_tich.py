@@ -25,7 +25,7 @@ SO_NEN_XET_DINH_DAY = 12    # Mô hình phải nằm ở đỉnh/đáy của bao
 SO_NEN_GAN_NHAT_XET = 3     # Xét mô hình trong bao nhiêu nến 4 giờ vừa đóng
 CHENH_LECH_TOI_THIEU = 0.15  # Chênh lệch sức mạnh tối thiểu giữa 2 đồng (đơn vị %)
 SO_NEN_TIM_MUC_TIEU = 20    # Mục tiêu = đỉnh/đáy của bao nhiêu nến 4 giờ gần nhất
-SO_GIO_DAU_NGAY = 8         # Trong bao nhiêu giờ đầu ngày giao dịch thì đo sức mạnh theo 24 giờ gần nhất
+SO_GIO_DAU_NGAY = 2         # Trong bao nhiêu giờ đầu ngày giao dịch thì dùng sức mạnh của cả ngày hôm trước
 SO_NEN_TREN_BIEU_DO = 45    # Số nến 4 giờ vẽ trên ảnh biểu đồ gửi Telegram và trên trang web
 # ---------------------------------------------------------------
 
@@ -141,6 +141,28 @@ def mo_hinh_tang(n, i, a):
     if (giam(p) and than(p) > 0.5 * a and tang(k)
             and (p["o"] + p["c"]) / 2 < k["c"] < p["o"]):
         ds.append(("xuyên đâm", 2))
+    # Quét đáy: râu chọc thủng đáy thấp nhất 12 nến trước rồi đóng cửa quay lên trên đáy đó
+    day_cu = min(b["l"] for b in n[i - 12:i])
+    if k["l"] < day_cu < k["c"] and k["c"] - k["l"] >= 0.5 * bien(k) and bien(k) >= 0.6 * a:
+        ds.append(("quét đáy", 1))
+    # Phá giả nến mẹ: 1-2 nến nằm gọn trong nến mẹ, nến sau chọc thủng đáy nến mẹ rồi đóng cửa quay vào trong
+    for so_con in (1, 2):
+        me = n[i - so_con - 1]
+        con = n[i - so_con:i]
+        if (bien(me) >= 0.8 * a and all(b["h"] <= me["h"] and b["l"] >= me["l"] for b in con)
+                and k["l"] < me["l"] < k["c"] < me["h"]):
+            ds.append(("phá giả nến mẹ", so_con + 2))
+            break
+    # Ba nến trong tăng: nến giảm lớn, nến nhỏ nằm trong thân nó, nến tăng đóng vượt giá mở nến giảm lớn
+    pp = n[i - 2]
+    if (giam(pp) and than(pp) > 0.5 * a and max(p["o"], p["c"]) <= pp["o"] and min(p["o"], p["c"]) >= pp["c"]
+            and tang(k) and k["c"] > pp["o"]):
+        ds.append(("ba nến trong tăng", 3))
+    # Ba lính trắng: ba nến tăng thân dài liên tiếp, mỗi nến mở trong thân nến trước, đóng cao hơn, gần đỉnh nến
+    ba = n[i - 2:i + 1]
+    if (all(tang(b) and than(b) > 0.5 * a and rau_tren(b) <= 0.3 * bien(b) for b in ba)
+            and all(ba[x - 1]["o"] <= ba[x]["o"] <= ba[x - 1]["c"] and ba[x]["c"] > ba[x - 1]["c"] for x in (1, 2))):
+        ds.append(("ba lính trắng", 3))
     return ds
 
 
@@ -166,6 +188,28 @@ def mo_hinh_giam(n, i, a):
     if (tang(p) and than(p) > 0.5 * a and giam(k)
             and p["o"] < k["c"] < (p["o"] + p["c"]) / 2):
         ds.append(("mây đen", 2))
+    # Quét đỉnh: râu chọc thủng đỉnh cao nhất 12 nến trước rồi đóng cửa quay xuống dưới đỉnh đó
+    dinh_cu = max(b["h"] for b in n[i - 12:i])
+    if k["c"] < dinh_cu < k["h"] and k["h"] - k["c"] >= 0.5 * bien(k) and bien(k) >= 0.6 * a:
+        ds.append(("quét đỉnh", 1))
+    # Phá giả nến mẹ: nến sau chọc thủng đỉnh nến mẹ rồi đóng cửa quay vào trong
+    for so_con in (1, 2):
+        me = n[i - so_con - 1]
+        con = n[i - so_con:i]
+        if (bien(me) >= 0.8 * a and all(b["h"] <= me["h"] and b["l"] >= me["l"] for b in con)
+                and me["l"] < k["c"] < me["h"] < k["h"]):
+            ds.append(("phá giả nến mẹ", so_con + 2))
+            break
+    # Ba nến trong giảm
+    pp = n[i - 2]
+    if (tang(pp) and than(pp) > 0.5 * a and max(p["o"], p["c"]) <= pp["c"] and min(p["o"], p["c"]) >= pp["o"]
+            and giam(k) and k["c"] < pp["o"]):
+        ds.append(("ba nến trong giảm", 3))
+    # Ba quạ đen: ba nến giảm thân dài liên tiếp, mỗi nến mở trong thân nến trước, đóng thấp hơn, gần đáy nến
+    ba = n[i - 2:i + 1]
+    if (all(giam(b) and than(b) > 0.5 * a and rau_duoi(b) <= 0.3 * bien(b) for b in ba)
+            and all(ba[x - 1]["c"] <= ba[x]["o"] <= ba[x - 1]["o"] and ba[x]["c"] < ba[x - 1]["c"] for x in (1, 2))):
+        ds.append(("ba quạ đen", 3))
     return ds
 
 
@@ -220,38 +264,38 @@ def quet_mo_hinh(da_dong, dang_chay, gia):
     return None
 
 
-def cach_do_suc_manh(bay_gio):
-    """Đầu ngày giao dịch dùng 24 giờ gần nhất, sau đó dùng giá mở cửa ngày."""
-    lech = lech_gio_san(bay_gio)
-    dau_ngay = (bay_gio + lech) // 86400 * 86400 - lech
-    if bay_gio - dau_ngay < SO_GIO_DAU_NGAY * 3600:
-        return "24 giờ gần nhất", bay_gio - 86400
-    return "từ giá mở cửa ngày", dau_ngay
+def dau_ngay_san(ts):
+    """Thời điểm mở cửa ngày giao dịch của sàn chứa thời điểm ts (0 giờ sàn = 17 giờ New York)."""
+    lech = lech_gio_san(ts)
+    return (ts + lech) // 86400 * 86400 - lech
 
 
-def thay_doi_phan_tram(nen_gio, moc, dung_24_gio):
-    """% thay đổi từ mốc tới giá hiện tại."""
-    gia_moc = None
-    if dung_24_gio:
-        for (t, o, h, l, c) in nen_gio:
-            if t + 3600 <= moc:
-                gia_moc = c          # giá đóng của nến giờ cuối cùng trước mốc
-            else:
-                break
-    else:
-        for (t, o, h, l, c) in nen_gio:
-            if t >= moc:
-                gia_moc = o          # giá mở của nến giờ đầu tiên trong ngày
-                break
-    if not gia_moc:
+def cach_do_suc_manh(bay_gio, nen_mau):
+    """Sức mạnh tính giống MarketMilk: % thay đổi từ giá mở cửa ngày của sàn.
+    Ngay đầu ngày (sức mạnh chưa hình thành) thì dùng sức mạnh cả ngày vừa kết thúc."""
+    dau = dau_ngay_san(bay_gio)
+    if bay_gio - dau >= SO_GIO_DAU_NGAY * 3600:
+        return "từ giá mở cửa ngày", dau, bay_gio
+    truoc = [x[0] for x in nen_mau if x[0] < dau]
+    if not truoc:
+        return "từ giá mở cửa ngày", dau, bay_gio
+    return "cả ngày hôm trước", dau_ngay_san(truoc[-1]), dau
+
+
+def thay_doi_phan_tram(nen_gio, moc_dau, moc_cuoi):
+    """% thay đổi từ giá mở của nến giờ đầu tiên sau mốc đầu, tới giá đóng của nến giờ cuối cùng trước mốc cuối."""
+    gia_dau = next((o for (t, o, h, l, c) in nen_gio if t >= moc_dau), None)
+    gia_cuoi = None
+    for (t, o, h, l, c) in nen_gio:
+        if t < moc_cuoi:
+            gia_cuoi = c
+    if not gia_dau or gia_cuoi is None:
         return 0.0
-    return (nen_gio[-1][4] - gia_moc) / gia_moc * 100
+    return (gia_cuoi - gia_dau) / gia_dau * 100
 
 
 def phan_tich(lay_nen=lay_nen_gio, bay_gio=None):
     bay_gio = bay_gio or int(time.time())
-    cach_do, moc = cach_do_suc_manh(bay_gio)
-    dung_24_gio = cach_do == "24 giờ gần nhất"
     tong = [0.0] * 8
     dem = [0] * 8
     tho = {}
@@ -262,7 +306,9 @@ def phan_tich(lay_nen=lay_nen_gio, bay_gio=None):
             print(f"Thiếu dữ liệu {ten}, bỏ qua")
             continue
         tho[(i, j)] = nen
-        pct = thay_doi_phan_tram(nen, moc, dung_24_gio)
+        if len(tho) == 1:
+            cach_do, moc_dau, moc_cuoi = cach_do_suc_manh(bay_gio, nen)
+        pct = thay_doi_phan_tram(nen, moc_dau, moc_cuoi)
         tong[i] += pct
         dem[i] += 1
         tong[j] -= pct
