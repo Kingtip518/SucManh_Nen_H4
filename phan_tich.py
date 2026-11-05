@@ -37,7 +37,8 @@ THU_MUC = os.path.dirname(os.path.abspath(__file__))
 FILE_DATA = os.path.join(THU_MUC, "data.json")
 
 MA_BOT = os.environ.get("TELEGRAM_TOKEN", "").strip()
-MA_CHAT = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
+# Có thể ghi nhiều mã, cách nhau bằng dấu phẩy: mã của anh, mã nhóm, mã kênh
+DANH_SACH_CHAT = [m.strip() for m in os.environ.get("TELEGRAM_CHAT_ID", "").split(",") if m.strip()]
 DIA_CHI_WEB = os.environ.get("DIA_CHI_WEB", "").strip()
 LUON_GUI = os.environ.get("LUON_GUI_TELEGRAM", "") == "co"
 
@@ -501,21 +502,29 @@ def goi_telegram(phuong_thuc, du_lieu, tep=None):
 
 
 def gui_bao_cao(kq):
-    if not MA_BOT or not MA_CHAT:
+    if not MA_BOT or not DANH_SACH_CHAT:
         print("Chưa có mã bot hoặc mã chat Telegram, bỏ qua gửi tin.")
         return
-    goi_telegram("sendMessage", {"chat_id": MA_CHAT, "text": soan_tin_tom_tat(kq), "parse_mode": "HTML",
-                                 "disable_web_page_preview": "true"})
+    # Vẽ ảnh một lần, gửi cho tất cả nơi nhận
     thu_muc = tempfile.mkdtemp()
+    anh = []
     for k, d in enumerate(kq["dat"][:8], 1):
         duong_dan = os.path.join(thu_muc, f"{k}.png")
         try:
             ve_bieu_do(d, duong_dan)
-            goi_telegram("sendPhoto", {"chat_id": MA_CHAT, "caption": soan_chu_thich_anh(k, d),
-                                       "parse_mode": "HTML"}, tep=duong_dan)
         except Exception as loi:
-            print(f"Vẽ hoặc gửi ảnh {d['cap']} lỗi:", loi)
-            goi_telegram("sendMessage", {"chat_id": MA_CHAT, "text": soan_chu_thich_anh(k, d), "parse_mode": "HTML"})
+            print(f"Vẽ ảnh {d['cap']} lỗi:", loi)
+            duong_dan = None
+        anh.append((soan_chu_thich_anh(k, d), duong_dan))
+    tom_tat = soan_tin_tom_tat(kq)
+    for ma in DANH_SACH_CHAT:
+        goi_telegram("sendMessage", {"chat_id": ma, "text": tom_tat, "parse_mode": "HTML",
+                                     "disable_web_page_preview": "true"})
+        for chu_thich, duong_dan in anh:
+            if duong_dan:
+                goi_telegram("sendPhoto", {"chat_id": ma, "caption": chu_thich, "parse_mode": "HTML"}, tep=duong_dan)
+            else:
+                goi_telegram("sendMessage", {"chat_id": ma, "text": chu_thich, "parse_mode": "HTML"})
 
 
 def main():
