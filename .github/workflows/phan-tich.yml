@@ -1,8 +1,6 @@
 name: Quet nen 4 gio va suc manh tien te
 
 on:
-  schedule:
-    - cron: "7 * * * 0-5"
   workflow_dispatch:
     inputs:
       luon_gui:
@@ -12,6 +10,10 @@ on:
 
 permissions:
   contents: write
+
+concurrency:
+  group: quet-nen
+  cancel-in-progress: false
 
 jobs:
   quet:
@@ -36,4 +38,3 @@ jobs:
           git diff --cached --quiet || git commit -m "Cập nhật kết quả quét"
           git pull --rebase origin main
           git push
-          
