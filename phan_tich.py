@@ -23,7 +23,6 @@ from zoneinfo import ZoneInfo
 # ---------------- Cài đặt (sửa ở đây nếu muốn) ----------------
 SO_NEN_XET_DINH_DAY = 12    # Mô hình phải nằm ở đỉnh/đáy của bao nhiêu nến 4 giờ gần nhất
 SO_NEN_GAN_NHAT_XET = 3     # Xét mô hình trong bao nhiêu nến 4 giờ vừa đóng
-CHENH_LECH_TOI_THIEU = 0.15  # Chênh lệch sức mạnh tối thiểu giữa 2 đồng (đơn vị %)
 SO_NEN_TIM_MUC_TIEU = 20    # Mục tiêu = đỉnh/đáy của bao nhiêu nến 4 giờ gần nhất
 SO_GIO_DAU_NGAY = 2         # Trong bao nhiêu giờ đầu ngày giao dịch thì dùng sức mạnh của cả ngày hôm trước
 SO_NEN_TREN_BIEU_DO = 45    # Số nến 4 giờ vẽ trên ảnh biểu đồ gửi Telegram và trên trang web
@@ -217,8 +216,8 @@ def gio_vn(ts):
     return datetime.fromtimestamp(ts, GIO_VN).strftime("%H:%M %d/%m")
 
 
-def quet_mo_hinh(da_dong, dang_chay, gia):
-    """Tìm mô hình gần nhất còn hiệu lực. Trả về dict hoặc None."""
+def quet_mo_hinh(da_dong, dang_chay, gia, huong):
+    """Tìm mô hình gần nhất còn hiệu lực theo đúng hướng cần (1 = mua, -1 = bán). Trả về dict hoặc None."""
     n = da_dong
     if len(n) < SO_NEN_XET_DINH_DAY + SO_NEN_GAN_NHAT_XET + SO_NEN_TIM_MUC_TIEU:
         return None
@@ -233,7 +232,7 @@ def quet_mo_hinh(da_dong, dang_chay, gia):
 
         # Mô hình tăng: vùng nến tạo mô hình (ít nhất 3 nến) phải chứa đáy thấp nhất của cửa sổ
         ten, day, so_nen = [], None, 1
-        for (tm, so) in mo_hinh_tang(n, i, a):
+        for (tm, so) in (mo_hinh_tang(n, i, a) if huong == 1 else []):
             d = min(b["l"] for b in n[i - max(3, so) + 1:i + 1])
             if d <= min(b["l"] for b in cua_so):
                 ten.append(tm)
@@ -248,7 +247,7 @@ def quet_mo_hinh(da_dong, dang_chay, gia):
                     "cat_lo": cat_lo, "muc_tieu": muc_tieu}
 
         ten, dinh, so_nen = [], None, 1
-        for (tm, so) in mo_hinh_giam(n, i, a):
+        for (tm, so) in (mo_hinh_giam(n, i, a) if huong == -1 else []):
             d = max(b["h"] for b in n[i - max(3, so) + 1:i + 1])
             if d >= max(b["h"] for b in cua_so):
                 ten.append(tm)
@@ -314,15 +313,33 @@ def phan_tich(lay_nen=lay_nen_gio, bay_gio=None):
         tong[j] -= pct
         dem[j] += 1
     suc_manh = [tong[c] / dem[c] if dem[c] else 0.0 for c in range(8)]
+    xep_hang = sorted(range(8), key=lambda c: -suc_manh[c])
 
-    dat, loai = [], []
+    # Chỉ ghép: đồng mạnh nhất với 3 đồng yếu nhất, và đồng yếu nhất với 3 đồng mạnh nhất.
+    # Luôn mua đồng mạnh, bán đồng yếu.
+    manh_nhat, yeu_nhat = xep_hang[0], xep_hang[-1]
+    ghep = [(manh_nhat, y) for y in xep_hang[-3:][::-1]] + [(m, yeu_nhat) for m in xep_hang[1:3]]
+    chon = {}
+    for (m, y) in ghep:
+        if (m, y) in tho:
+            chon[(m, y)] = 1        # đồng mạnh đứng trước trong tên cặp: MUA
+        elif (y, m) in tho:
+            chon[(y, m)] = -1       # đồng yếu đứng trước trong tên cặp: BÁN
+
+    dat, loai, theo_doi = [], [], []
     nen_dong_moi_nhat = 0
     for (i, j), nen in tho.items():
         da_dong, dang_chay = gop_nen_4_gio(nen, bay_gio)
         if da_dong:
             nen_dong_moi_nhat = max(nen_dong_moi_nhat, da_dong[-1]["dong"])
+        if (i, j) not in chon:
+            continue
+        huong = chon[(i, j)]
         gia = nen[-1][4]
-        th = quet_mo_hinh(da_dong, dang_chay, gia)
+        th = quet_mo_hinh(da_dong, dang_chay, gia, huong)
+        theo_doi.append({"cap": f"{TIEN[i]}/{TIEN[j]}", "huong": "MUA" if huong == 1 else "BÁN",
+                         "chenh": round(abs(suc_manh[i] - suc_manh[j]), 2),
+                         "trang_thai": th["mo_hinh"] if th else "Chưa có mô hình đảo chiều"})
         if not th:
             continue
         so = 3 if TIEN[j] == "JPY" else 5
@@ -349,16 +366,9 @@ def phan_tich(lay_nen=lay_nen_gio, bay_gio=None):
         dong["chi_so_mh"] = th["chi_so"] - bat_dau
         dong["so_le"] = so
         dong["so_nen_mh"] = th["so_nen"]
-        if chenh >= CHENH_LECH_TOI_THIEU:
-            dat.append(dong)
-        else:
-            dong["ly_do"] = ("Sức mạnh ngày ngược chiều mô hình" if chenh < 0
-                             else "Chênh lệch sức mạnh quá nhỏ")
-            for khoa in ("nen", "chi_so_mh", "so_nen_mh"):
-                dong.pop(khoa, None)
-            loai.append(dong)
+        dat.append(dong)
     dat.sort(key=lambda d: -d["chenh"])
-    loai.sort(key=lambda d: d["chenh"])
+    theo_doi.sort(key=lambda d: -d["chenh"])
 
     canh_bao = []
     for c in TIEN:
@@ -369,7 +379,6 @@ def phan_tich(lay_nen=lay_nen_gio, bay_gio=None):
         if ban >= 2:
             canh_bao.append(f"Đang bán {c} trong {ban} lệnh. Nếu {c} bật tăng, các lệnh này cùng lỗ. Nên chia nhỏ khối lượng.")
 
-    xep_hang = sorted(range(8), key=lambda c: -suc_manh[c])
     return {
         "cap_nhat": datetime.fromtimestamp(bay_gio, GIO_VN).strftime("%H:%M %d/%m/%Y"),
         "nen_4_gio_dong": gio_vn(nen_dong_moi_nhat) if nen_dong_moi_nhat else "",
@@ -377,9 +386,9 @@ def phan_tich(lay_nen=lay_nen_gio, bay_gio=None):
         "so_cap_doc_duoc": len(tho),
         "cach_do": cach_do,
         "suc_manh": [{"tien": TIEN[c], "phan_tram": round(suc_manh[c], 2)} for c in xep_hang],
-        "dat": dat, "loai": loai, "canh_bao": canh_bao,
+        "dat": dat, "loai": loai, "theo_doi": theo_doi, "canh_bao": canh_bao,
         "cai_dat": {"so_nen_dinh_day": SO_NEN_XET_DINH_DAY, "so_nen_gan_nhat": SO_NEN_GAN_NHAT_XET,
-                    "chenh_toi_thieu": CHENH_LECH_TOI_THIEU, "so_nen_muc_tieu": SO_NEN_TIM_MUC_TIEU},
+                    "so_nen_muc_tieu": SO_NEN_TIM_MUC_TIEU},
     }
 
 
@@ -399,8 +408,14 @@ def soan_tin_tom_tat(kq):
          f"Nến đóng lúc <b>{kq['nen_4_gio_dong']}</b>", "",
          f"<b>Sức mạnh tiền tệ</b> ({kq['cach_do']})",
          "<pre>" + "\n".join(dong_sm) + "</pre>"]
+    t.append("<b>5 cặp mạnh – yếu đang theo dõi</b>")
+    for x in kq.get("theo_doi", []):
+        dau = "🟢" if x["huong"] == "MUA" else "🔴"
+        co = "✅ " + x["trang_thai"] if x["trang_thai"] != "Chưa có mô hình đảo chiều" else "chờ mô hình"
+        t.append(f"{dau} {x['huong']} {x['cap']} · {co}")
+    t.append("")
     if not kq["dat"]:
-        t += ["Không có cặp nào đạt đủ hai điều kiện:", "mô hình nến đảo chiều + sức mạnh thuận chiều."]
+        t += ["Chưa cặp nào có mô hình nến đảo chiều đúng hướng."]
     else:
         t.append(f"<b>{len(kq['dat'])} lệnh đề xuất</b> (ảnh chi tiết ở tin sau)")
         for k, d in enumerate(kq["dat"], 1):

@@ -92,9 +92,9 @@ tr:last-child td{border-bottom:none}
   </section>
 
   <section>
-    <h2>Mô hình có nhưng bị loại</h2>
+    <h2>5 cặp mạnh – yếu đang theo dõi</h2>
     <div class="bang"><table>
-      <thead><tr><th>Cặp</th><th>Hướng mô hình</th><th>Mô hình</th><th>Nến đóng lúc</th><th>Chênh lệch</th><th>Lý do</th></tr></thead>
+      <thead><tr><th>Cặp</th><th>Hướng</th><th>Chênh lệch sức mạnh</th><th>Mô hình nến đảo chiều</th></tr></thead>
       <tbody id="loai"></tbody>
     </table></div>
   </section>
@@ -103,7 +103,7 @@ tr:last-child td{border-bottom:none}
     <h2>Cách chọn lệnh</h2>
     <ol>
       <li>Tìm mô hình nến đảo chiều (nhấn chìm, búa, sao băng, sao mai, sao hôm, đáy nhíp, đỉnh nhíp, xuyên đâm, mây đen, quét đáy, quét đỉnh, phá giả nến mẹ, ba nến trong, ba lính trắng, ba quạ đen) trên <span id="cdGan">3</span> nến 4 giờ vừa đóng, nằm ở đỉnh hoặc đáy của <span id="cdDinh">12</span> nến gần nhất, và giá chưa phá qua đỉnh hoặc đáy của mô hình.</li>
-      <li>Đồng mua phải mạnh hơn đồng bán, chênh lệch ít nhất <span id="cdChenh">0,15</span>%. Sức mạnh tính giống bảng MarketMilk: % thay đổi từ giá mở cửa ngày của sàn (05:00 giờ Việt Nam vào mùa đông, 04:00 vào mùa hè). Trong 2 giờ đầu ngày, khi sức mạnh chưa hình thành, dùng sức mạnh của cả ngày vừa kết thúc.</li>
+      <li>Chỉ xét 5 cặp: đồng mạnh nhất ghép với 3 đồng yếu nhất, và đồng yếu nhất ghép với 3 đồng mạnh nhất. Luôn mua đồng mạnh, bán đồng yếu, và chỉ nhận mô hình nến cùng hướng. Sức mạnh tính giống bảng MarketMilk: % thay đổi từ giá mở cửa ngày của sàn (05:00 giờ Việt Nam vào mùa đông, 04:00 vào mùa hè). Trong 2 giờ đầu ngày, khi sức mạnh chưa hình thành, dùng sức mạnh của cả ngày vừa kết thúc.</li>
       <li>Cắt lỗ đặt ngoài đỉnh hoặc đáy mô hình. Mục tiêu là đỉnh hoặc đáy của <span id="cdMuc">20</span> nến 4 giờ gần nhất. Giá chờ là mức nên đợi giá hồi về để lời/lỗ đạt 1:1,5.</li>
     </ol>
     <p>Nến lấy theo giờ sàn MT5 phổ biến (0 giờ sàn = 5 giờ chiều New York), có thể lệch vài pip so với sàn của anh. Đây là công cụ tham khảo, không phải lời khuyên đầu tư.</p>
@@ -125,7 +125,7 @@ function veSucManh(ds){
   }).join('');
 }
 function veLenh(ds){
-  if(!ds.length){$('lenh').innerHTML='<div class="trong">Nến 4 giờ vừa đóng không có cặp nào đạt cả hai điều kiện. Chờ nến tiếp theo.</div>';return;}
+  if(!ds.length){$('lenh').innerHTML='<div class="trong">Trong 5 cặp mạnh – yếu, chưa cặp nào có mô hình nến đảo chiều đúng hướng. Chờ nến tiếp theo.</div>';return;}
   $('lenh').innerHTML=ds.map((d,k)=>`<article class="the">
     <div class="tren"><span class="huong ${d.huong}">${d.huong}</span><span class="cap">${d.cap}</span><span class="stt">#${k+1}</span></div>
     <div class="mh">${d.mo_hinh} · nến đóng ${d.gio_nen}</div>
@@ -167,8 +167,8 @@ function veBieuDo(cv,d){
   g.strokeStyle=VIEN;g.strokeRect(0.5,0.5,W-PH,H-1);
 }
 function veLoai(ds){
-  $('loai').innerHTML=ds.length?ds.map(d=>`<tr><td><b>${d.cap}</b></td><td>${d.huong}</td><td>${d.mo_hinh}</td><td class="so">${d.gio_nen}</td><td class="so">${so(d.chenh.toFixed(2))}</td><td>${d.ly_do}</td></tr>`).join('')
-    :'<tr><td colspan="6">Không có mô hình nào bị loại.</td></tr>';
+  $('loai').innerHTML=ds.length?ds.map(d=>`<tr><td><b>${d.cap}</b></td><td><span class="huong ${d.huong}">${d.huong}</span></td><td class="so">${so(d.chenh.toFixed(2))}</td><td>${d.trang_thai==='Chưa có mô hình đảo chiều'?'<span style="color:var(--phu)">Chờ mô hình</span>':'<b>'+d.trang_thai+'</b>'}</td></tr>`).join('')
+    :'<tr><td colspan="4">Chưa có dữ liệu.</td></tr>';
 }
 async function tai(){
   try{
@@ -178,11 +178,11 @@ async function tai(){
     $('trangthai').textContent=`Cập nhật ${d.cap_nhat} · nến 4 giờ vừa đóng lúc ${d.nen_4_gio_dong} (giờ Việt Nam) · đọc được ${d.so_cap_doc_duoc}/28 cặp`;
     $('mau').hidden=!d.du_lieu_mau;
     $('tieuDeSucManh').textContent='Sức mạnh tiền tệ (% '+(d.cach_do||'từ giá mở cửa ngày')+')';
-    veSucManh(d.suc_manh); veLenh(d.dat); veLoai(d.loai||[]);
+    veSucManh(d.suc_manh); veLenh(d.dat); veLoai(d.theo_doi||[]);
     $('khuCanhBao').hidden=!(d.canh_bao&&d.canh_bao.length);
     $('canhBao').innerHTML=(d.canh_bao||[]).map(c=>`<li>${c}</li>`).join('');
     const c=d.cai_dat||{};
-    if(c.so_nen_gan_nhat){$('cdGan').textContent=c.so_nen_gan_nhat;$('cdDinh').textContent=c.so_nen_dinh_day;$('cdChenh').textContent=so(c.chenh_toi_thieu);$('cdMuc').textContent=c.so_nen_muc_tieu;}
+    if(c.so_nen_gan_nhat){$('cdGan').textContent=c.so_nen_gan_nhat;$('cdDinh').textContent=c.so_nen_dinh_day;$('cdMuc').textContent=c.so_nen_muc_tieu;}
   }catch(e){
     $('trangthai').textContent='Không đọc được dữ liệu. Bấm Tải lại sau ít phút.';
   }
