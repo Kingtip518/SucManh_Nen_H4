@@ -21,6 +21,7 @@ SO_NEN_XET_DINH_DAY = 12    # Mô hình phải nằm ở đỉnh/đáy của bao
 SO_NEN_GAN_NHAT_XET = 3     # Xét mô hình trong bao nhiêu nến 4 giờ vừa đóng
 CHENH_LECH_TOI_THIEU = 0.15  # Chênh lệch sức mạnh tối thiểu giữa 2 đồng (đơn vị %)
 SO_NEN_TIM_MUC_TIEU = 20    # Mục tiêu = đỉnh/đáy của bao nhiêu nến 4 giờ gần nhất
+SO_GIO_DAU_NGAY = 8         # Trong bao nhiêu giờ đầu ngày giao dịch thì đo sức mạnh theo 24 giờ gần nhất
 # ---------------------------------------------------------------
 
 TIEN = ["EUR", "GBP", "AUD", "NZD", "USD", "CAD", "CHF", "JPY"]
@@ -72,7 +73,8 @@ def gop_nen_4_gio(nen_gio, bay_gio):
     for (t, o, h, l, c) in nen_gio:
         khoa = (t + lech_gio_san(t)) // 14400
         if khoa not in nhom:
-            nhom[khoa] = {"t": t, "o": o, "h": h, "l": l, "c": c, "khoa": khoa}
+            gio_mo = khoa * 14400 - lech_gio_san(t)
+            nhom[khoa] = {"t": t, "o": o, "h": h, "l": l, "c": c, "khoa": khoa, "dong": gio_mo + 14400}
             thu_tu.append(khoa)
         else:
             b = nhom[khoa]
@@ -107,36 +109,57 @@ def giam(b): return b["c"] < b["o"]
 
 
 def mo_hinh_tang(n, i, a):
-    k, p, pp = n[i], n[i - 1], n[i - 2]
+    """Trả về danh sách (tên mô hình, số nến tạo mô hình)."""
+    k, p = n[i], n[i - 1]
     ds = []
-    if giam(p) and tang(k) and k["c"] >= p["o"] and k["o"] <= p["c"] and than(k) > than(p):
-        ds.append("nhấn chìm tăng")
-    if rau_duoi(k) >= 2 * than(k) and rau_tren(k) <= 0.35 * bien(k) and bien(k) >= 0.8 * a:
-        ds.append("búa")
-    if giam(pp) and than(pp) > 0.5 * a and than(p) < 0.35 * than(pp) and tang(k) and k["c"] > (pp["o"] + pp["c"]) / 2:
-        ds.append("sao mai")
+    # Nhấn chìm tăng: nến trước giảm, nến sau tăng đóng cửa vượt giá mở nến trước, thân lớn hơn
+    if giam(p) and tang(k) and k["c"] >= p["o"] and than(k) > than(p):
+        ds.append(("nhấn chìm tăng", 2))
+    # Búa: râu dưới dài gấp đôi thân, râu trên ngắn, nến không quá nhỏ
+    if rau_duoi(k) >= 2 * than(k) and rau_tren(k) <= 0.35 * bien(k) and bien(k) >= 0.6 * a:
+        ds.append(("búa", 1))
+    # Sao mai: nến giảm lớn, 1 hoặc 2 nến lưỡng lự, rồi nến tăng đóng trên giữa thân nến giảm lớn
+    for so_giua in (1, 2):
+        if i - 1 - so_giua < 0:
+            continue
+        lon = n[i - 1 - so_giua]
+        giua = n[i - so_giua:i]
+        if (giam(lon) and than(lon) > 0.5 * a and all(than(g) <= 0.6 * than(lon) for g in giua)
+                and tang(k) and than(k) > 0.3 * a and k["c"] > (lon["o"] + lon["c"]) / 2):
+            ds.append(("sao mai", so_giua + 2))
+            break
+    # Đáy nhíp: hai đáy bằng nhau, nến sau tăng
     if giam(p) and tang(k) and abs(k["l"] - p["l"]) < 0.1 * a and than(k) > 0.3 * a:
-        ds.append("đáy nhíp")
-    if (giam(p) and than(p) > 0.5 * a and tang(k) and k["c"] > (p["o"] + p["c"]) / 2
-            and k["c"] < p["o"] and k["o"] <= p["c"] + 0.05 * a):
-        ds.append("xuyên đâm")
+        ds.append(("đáy nhíp", 2))
+    # Xuyên đâm: nến giảm lớn, nến tăng đóng trên giữa thân nhưng chưa vượt giá mở nến giảm
+    if (giam(p) and than(p) > 0.5 * a and tang(k)
+            and (p["o"] + p["c"]) / 2 < k["c"] < p["o"]):
+        ds.append(("xuyên đâm", 2))
     return ds
 
 
 def mo_hinh_giam(n, i, a):
-    k, p, pp = n[i], n[i - 1], n[i - 2]
+    """Trả về danh sách (tên mô hình, số nến tạo mô hình)."""
+    k, p = n[i], n[i - 1]
     ds = []
-    if tang(p) and giam(k) and k["c"] <= p["o"] and k["o"] >= p["c"] and than(k) > than(p):
-        ds.append("nhấn chìm giảm")
-    if rau_tren(k) >= 2 * than(k) and rau_duoi(k) <= 0.35 * bien(k) and bien(k) >= 0.8 * a:
-        ds.append("sao băng")
-    if tang(pp) and than(pp) > 0.5 * a and than(p) < 0.35 * than(pp) and giam(k) and k["c"] < (pp["o"] + pp["c"]) / 2:
-        ds.append("sao hôm")
+    if tang(p) and giam(k) and k["c"] <= p["o"] and than(k) > than(p):
+        ds.append(("nhấn chìm giảm", 2))
+    if rau_tren(k) >= 2 * than(k) and rau_duoi(k) <= 0.35 * bien(k) and bien(k) >= 0.6 * a:
+        ds.append(("sao băng", 1))
+    for so_giua in (1, 2):
+        if i - 1 - so_giua < 0:
+            continue
+        lon = n[i - 1 - so_giua]
+        giua = n[i - so_giua:i]
+        if (tang(lon) and than(lon) > 0.5 * a and all(than(g) <= 0.6 * than(lon) for g in giua)
+                and giam(k) and than(k) > 0.3 * a and k["c"] < (lon["o"] + lon["c"]) / 2):
+            ds.append(("sao hôm", so_giua + 2))
+            break
     if tang(p) and giam(k) and abs(k["h"] - p["h"]) < 0.1 * a and than(k) > 0.3 * a:
-        ds.append("đỉnh nhíp")
-    if (tang(p) and than(p) > 0.5 * a and giam(k) and k["c"] < (p["o"] + p["c"]) / 2
-            and k["c"] > p["o"] and k["o"] >= p["c"] - 0.05 * a):
-        ds.append("mây đen")
+        ds.append(("đỉnh nhíp", 2))
+    if (tang(p) and than(p) > 0.5 * a and giam(k)
+            and p["o"] < k["c"] < (p["o"] + p["c"]) / 2):
+        ds.append(("mây đen", 2))
     return ds
 
 
@@ -147,7 +170,7 @@ def gio_vn(ts):
 def quet_mo_hinh(da_dong, dang_chay, gia):
     """Tìm mô hình gần nhất còn hiệu lực. Trả về dict hoặc None."""
     n = da_dong
-    if len(n) < SO_NEN_XET_DINH_DAY + SO_NEN_GAN_NHAT_XET + 20:
+    if len(n) < SO_NEN_XET_DINH_DAY + SO_NEN_GAN_NHAT_XET + SO_NEN_TIM_MUC_TIEU:
         return None
     atr = tinh_atr(n)
     cuoi = len(n) - 1
@@ -156,57 +179,82 @@ def quet_mo_hinh(da_dong, dang_chay, gia):
         if a <= 0:
             continue
         cua_so = n[i - SO_NEN_XET_DINH_DAY:i + 1]
-        day_3 = min(n[i]["l"], n[i - 1]["l"], n[i - 2]["l"])
-        dinh_3 = max(n[i]["h"], n[i - 1]["h"], n[i - 2]["h"])
         sau = n[i + 1:] + dang_chay
 
-        if day_3 <= min(b["l"] for b in cua_so):
-            ds = mo_hinh_tang(n, i, a)
-            if ds and gia > day_3 and all(b["l"] > day_3 for b in sau):
-                cat_lo = day_3 - 0.1 * a
-                muc_tieu = max(b["h"] for b in n[-SO_NEN_TIM_MUC_TIEU:])
-                if muc_tieu <= gia:
-                    muc_tieu = gia + 2 * (gia - cat_lo)
-                return {"huong": 1, "mo_hinh": " + ".join(ds), "gio_nen": gio_vn(n[i]["t"]),
-                        "nen_truoc": cuoi - i, "cat_lo": cat_lo, "muc_tieu": muc_tieu}
+        # Mô hình tăng: vùng nến tạo mô hình (ít nhất 3 nến) phải chứa đáy thấp nhất của cửa sổ
+        ten, day = [], None
+        for (tm, so) in mo_hinh_tang(n, i, a):
+            d = min(b["l"] for b in n[i - max(3, so) + 1:i + 1])
+            if d <= min(b["l"] for b in cua_so):
+                ten.append(tm)
+                day = d if day is None else min(day, d)
+        if ten and gia > day and all(b["l"] > day for b in sau):
+            cat_lo = day - 0.1 * a
+            muc_tieu = max(b["h"] for b in n[-SO_NEN_TIM_MUC_TIEU:])
+            if muc_tieu <= gia:
+                muc_tieu = gia + 2 * (gia - cat_lo)
+            return {"huong": 1, "mo_hinh": " + ".join(ten), "gio_nen": gio_vn(n[i]["dong"]),
+                    "cat_lo": cat_lo, "muc_tieu": muc_tieu}
 
-        if dinh_3 >= max(b["h"] for b in cua_so):
-            ds = mo_hinh_giam(n, i, a)
-            if ds and gia < dinh_3 and all(b["h"] < dinh_3 for b in sau):
-                cat_lo = dinh_3 + 0.1 * a
-                muc_tieu = min(b["l"] for b in n[-SO_NEN_TIM_MUC_TIEU:])
-                if muc_tieu >= gia:
-                    muc_tieu = gia - 2 * (cat_lo - gia)
-                return {"huong": -1, "mo_hinh": " + ".join(ds), "gio_nen": gio_vn(n[i]["t"]),
-                        "nen_truoc": cuoi - i, "cat_lo": cat_lo, "muc_tieu": muc_tieu}
+        ten, dinh = [], None
+        for (tm, so) in mo_hinh_giam(n, i, a):
+            d = max(b["h"] for b in n[i - max(3, so) + 1:i + 1])
+            if d >= max(b["h"] for b in cua_so):
+                ten.append(tm)
+                dinh = d if dinh is None else max(dinh, d)
+        if ten and gia < dinh and all(b["h"] < dinh for b in sau):
+            cat_lo = dinh + 0.1 * a
+            muc_tieu = min(b["l"] for b in n[-SO_NEN_TIM_MUC_TIEU:])
+            if muc_tieu >= gia:
+                muc_tieu = gia - 2 * (cat_lo - gia)
+            return {"huong": -1, "mo_hinh": " + ".join(ten), "gio_nen": gio_vn(n[i]["dong"]),
+                    "cat_lo": cat_lo, "muc_tieu": muc_tieu}
     return None
 
 
-def thay_doi_trong_ngay(nen_gio):
-    """% thay đổi từ giá mở cửa ngày (theo giờ sàn) tới giá hiện tại."""
-    cuoi = nen_gio[-1]
-    ngay = (cuoi[0] + lech_gio_san(cuoi[0])) // 86400
-    mo = None
-    for (t, o, h, l, c) in nen_gio:
-        if (t + lech_gio_san(t)) // 86400 == ngay:
-            mo = o
-            break
-    return (cuoi[4] - mo) / mo * 100 if mo else 0.0
+def cach_do_suc_manh(bay_gio):
+    """Đầu ngày giao dịch dùng 24 giờ gần nhất, sau đó dùng giá mở cửa ngày."""
+    lech = lech_gio_san(bay_gio)
+    dau_ngay = (bay_gio + lech) // 86400 * 86400 - lech
+    if bay_gio - dau_ngay < SO_GIO_DAU_NGAY * 3600:
+        return "24 giờ gần nhất", bay_gio - 86400
+    return "từ giá mở cửa ngày", dau_ngay
+
+
+def thay_doi_phan_tram(nen_gio, moc, dung_24_gio):
+    """% thay đổi từ mốc tới giá hiện tại."""
+    gia_moc = None
+    if dung_24_gio:
+        for (t, o, h, l, c) in nen_gio:
+            if t + 3600 <= moc:
+                gia_moc = c          # giá đóng của nến giờ cuối cùng trước mốc
+            else:
+                break
+    else:
+        for (t, o, h, l, c) in nen_gio:
+            if t >= moc:
+                gia_moc = o          # giá mở của nến giờ đầu tiên trong ngày
+                break
+    if not gia_moc:
+        return 0.0
+    return (nen_gio[-1][4] - gia_moc) / gia_moc * 100
 
 
 def phan_tich(lay_nen=lay_nen_gio, bay_gio=None):
     bay_gio = bay_gio or int(time.time())
+    cach_do, moc = cach_do_suc_manh(bay_gio)
+    dung_24_gio = cach_do == "24 giờ gần nhất"
     tong = [0.0] * 8
     dem = [0] * 8
     tho = {}
     for (i, j) in CAP:
         ten = TIEN[i] + TIEN[j]
-        nen = lay_nen(ten)
+        nen = [x for x in lay_nen(ten) if x[0] < bay_gio]
         if len(nen) < 100:
             print(f"Thiếu dữ liệu {ten}, bỏ qua")
             continue
         tho[(i, j)] = nen
-        pct = thay_doi_trong_ngay(nen)
+        pct = thay_doi_phan_tram(nen, moc, dung_24_gio)
         tong[i] += pct
         dem[i] += 1
         tong[j] -= pct
@@ -218,7 +266,7 @@ def phan_tich(lay_nen=lay_nen_gio, bay_gio=None):
     for (i, j), nen in tho.items():
         da_dong, dang_chay = gop_nen_4_gio(nen, bay_gio)
         if da_dong:
-            nen_dong_moi_nhat = max(nen_dong_moi_nhat, da_dong[-1]["t"])
+            nen_dong_moi_nhat = max(nen_dong_moi_nhat, da_dong[-1]["dong"])
         gia = nen[-1][4]
         th = quet_mo_hinh(da_dong, dang_chay, gia)
         if not th:
@@ -263,6 +311,7 @@ def phan_tich(lay_nen=lay_nen_gio, bay_gio=None):
         "nen_4_gio_dong": gio_vn(nen_dong_moi_nhat) if nen_dong_moi_nhat else "",
         "ma_nen": nen_dong_moi_nhat,
         "so_cap_doc_duoc": len(tho),
+        "cach_do": cach_do,
         "suc_manh": [{"tien": TIEN[c], "phan_tram": round(suc_manh[c], 2)} for c in xep_hang],
         "dat": dat, "loai": loai, "canh_bao": canh_bao,
         "cai_dat": {"so_nen_dinh_day": SO_NEN_XET_DINH_DAY, "so_nen_gan_nhat": SO_NEN_GAN_NHAT_XET,
@@ -273,14 +322,14 @@ def phan_tich(lay_nen=lay_nen_gio, bay_gio=None):
 def soan_tin(kq):
     sm = " | ".join(f"{x['tien']} {x['phan_tram']:+.2f}" for x in kq["suc_manh"])
     t = [f"<b>NẾN 4 GIỜ + SỨC MẠNH NGÀY</b>",
-         f"Nến 4 giờ vừa đóng: {kq['nen_4_gio_dong']} (giờ Việt Nam)", "",
-         "<b>Sức mạnh hôm nay</b> (mạnh → yếu)", sm, ""]
+         f"Nến 4 giờ vừa đóng lúc {kq['nen_4_gio_dong']} (giờ Việt Nam)", "",
+         f"<b>Sức mạnh</b> ({kq['cach_do']}, mạnh → yếu)", sm, ""]
     if not kq["dat"]:
         t.append("Không có cặp nào đạt cả hai điều kiện.")
     else:
         t.append("<b>LỆNH ĐỀ XUẤT</b>")
         for k, d in enumerate(kq["dat"], 1):
-            t.append(f"{k}. <b>{d['huong']} {d['cap']}</b>: {d['mo_hinh']} (nến {d['gio_nen']})")
+            t.append(f"{k}. <b>{d['huong']} {d['cap']}</b>: {d['mo_hinh']} (nến đóng {d['gio_nen']})")
             t.append(f"   Chênh sức mạnh {d['chenh']:.2f} | Giá {d['gia']}")
             t.append(f"   Cắt lỗ {d['cat_lo']} | Mục tiêu {d['muc_tieu']} | Lời/lỗ 1:{d['loi_lo']}")
             if d.get("gia_cho"):
