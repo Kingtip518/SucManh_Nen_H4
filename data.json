@@ -1,5 +1,5 @@
 {
- "cap_nhat": "09:54 05/11/2026",
+ "cap_nhat": "10:58 05/11/2026",
  "nen_4_gio_dong": "09:00 05/11",
  "ma_nen": 1793844000,
  "so_cap_doc_duoc": 28,
@@ -7,11 +7,11 @@
  "suc_manh": [
   {
    "tien": "NZD",
-   "phan_tram": 0.68
+   "phan_tram": 0.8
   },
   {
    "tien": "AUD",
-   "phan_tram": 0.49
+   "phan_tram": 0.53
   },
   {
    "tien": "GBP",
@@ -19,23 +19,23 @@
   },
   {
    "tien": "EUR",
-   "phan_tram": -0.1
+   "phan_tram": -0.14
   },
   {
    "tien": "CAD",
    "phan_tram": -0.14
   },
   {
-   "tien": "CHF",
-   "phan_tram": -0.15
-  },
-  {
    "tien": "USD",
    "phan_tram": -0.26
   },
   {
+   "tien": "CHF",
+   "phan_tram": -0.34
+  },
+  {
    "tien": "JPY",
-   "phan_tram": -0.47
+   "phan_tram": -0.39
   }
  ],
  "dat": [],
@@ -47,11 +47,11 @@
    "huong": "BÁN",
    "mo_hinh": "nhấn chìm giảm",
    "gio_nen": "01:00 05/11",
-   "chenh": -1.15,
-   "gia": 89.201,
+   "chenh": -1.19,
+   "gia": 89.267,
    "cat_lo": 89.431,
    "muc_tieu": 87.801,
-   "loi_lo": 6.1,
+   "loi_lo": 8.9,
    "so_le": 3,
    "ly_do": "Sức mạnh ngày ngược chiều mô hình"
   },
@@ -62,11 +62,11 @@
    "huong": "BÁN",
    "mo_hinh": "nhấn chìm giảm",
    "gio_nen": "01:00 05/11",
-   "chenh": -0.95,
-   "gia": 110.806,
+   "chenh": -0.92,
+   "gia": 110.756,
    "cat_lo": 111.344,
    "muc_tieu": 109.561,
-   "loi_lo": 2.3,
+   "loi_lo": 2.0,
    "so_le": 3,
    "ly_do": "Sức mạnh ngày ngược chiều mô hình"
   },
@@ -77,11 +77,27 @@
    "huong": "BÁN",
    "mo_hinh": "nhấn chìm giảm",
    "gio_nen": "05:00 05/11",
-   "chenh": -0.63,
-   "gia": 0.57132,
+   "chenh": -0.87,
+   "gia": 0.57097,
    "cat_lo": 0.57469,
    "muc_tieu": 0.5655,
-   "loi_lo": 1.7,
+   "loi_lo": 1.5,
+   "so_le": 5,
+   "ly_do": "Sức mạnh ngày ngược chiều mô hình"
+  },
+  {
+   "cap": "GBP/CHF",
+   "goc": "GBP",
+   "dinh": "CHF",
+   "huong": "BÁN",
+   "mo_hinh": "sao băng",
+   "gio_nen": "01:00 05/11",
+   "chenh": -0.29,
+   "gia": 1.09829,
+   "cat_lo": 1.10305,
+   "muc_tieu": 1.09385,
+   "loi_lo": 0.9,
+   "gia_cho": 1.09937,
    "so_le": 5,
    "ly_do": "Sức mạnh ngày ngược chiều mô hình"
   },
@@ -92,11 +108,11 @@
    "huong": "BÁN",
    "mo_hinh": "nhấn chìm giảm + sao hôm + đỉnh nhíp",
    "gio_nen": "01:00 05/11",
-   "chenh": -0.37,
-   "gia": 177.738,
+   "chenh": -0.26,
+   "gia": 177.843,
    "cat_lo": 178.526,
    "muc_tieu": 175.65,
-   "loi_lo": 2.7,
+   "loi_lo": 3.2,
    "so_le": 3,
    "ly_do": "Sức mạnh ngày ngược chiều mô hình"
   },
@@ -107,27 +123,12 @@
    "huong": "BÁN",
    "mo_hinh": "sao băng",
    "gio_nen": "05:00 05/11",
-   "chenh": -0.32,
-   "gia": 113.172,
+   "chenh": -0.25,
+   "gia": 113.187,
    "cat_lo": 113.692,
    "muc_tieu": 112.73,
    "loi_lo": 0.9,
    "gia_cho": 113.307,
-   "so_le": 3,
-   "ly_do": "Sức mạnh ngày ngược chiều mô hình"
-  },
-  {
-   "cap": "CHF/JPY",
-   "goc": "CHF",
-   "dinh": "JPY",
-   "huong": "BÁN",
-   "mo_hinh": "nhấn chìm giảm + đỉnh nhíp",
-   "gio_nen": "01:00 05/11",
-   "chenh": -0.32,
-   "gia": 193.926,
-   "cat_lo": 194.388,
-   "muc_tieu": 190.965,
-   "loi_lo": 6.4,
    "so_le": 3,
    "ly_do": "Sức mạnh ngày ngược chiều mô hình"
   },
@@ -139,10 +140,26 @@
    "mo_hinh": "sao hôm",
    "gio_nen": "01:00 05/11",
    "chenh": -0.21,
-   "gia": 1.34905,
+   "gia": 1.34955,
    "cat_lo": 1.35054,
    "muc_tieu": 1.33797,
-   "loi_lo": 7.5,
+   "loi_lo": 11.6,
+   "so_le": 5,
+   "ly_do": "Sức mạnh ngày ngược chiều mô hình"
+  },
+  {
+   "cap": "EUR/CHF",
+   "goc": "EUR",
+   "dinh": "CHF",
+   "huong": "BÁN",
+   "mo_hinh": "sao băng",
+   "gio_nen": "09:00 05/11",
+   "chenh": -0.2,
+   "gia": 0.91684,
+   "cat_lo": 0.92043,
+   "muc_tieu": 0.91262,
+   "loi_lo": 1.2,
+   "gia_cho": 0.9173,
    "so_le": 5,
    "ly_do": "Sức mạnh ngày ngược chiều mô hình"
   },
@@ -153,11 +170,11 @@
    "huong": "BÁN",
    "mo_hinh": "sao hôm",
    "gio_nen": "01:00 05/11",
-   "chenh": -0.16,
-   "gia": 1.126,
+   "chenh": -0.12,
+   "gia": 1.12676,
    "cat_lo": 1.12782,
    "muc_tieu": 1.11607,
-   "loi_lo": 5.4,
+   "loi_lo": 10.0,
    "so_le": 5,
    "ly_do": "Sức mạnh ngày ngược chiều mô hình"
   },
@@ -169,43 +186,26 @@
    "mo_hinh": "nhấn chìm tăng",
    "gio_nen": "01:00 05/11",
    "chenh": -0.12,
-   "gia": 1.39533,
+   "gia": 1.39495,
    "cat_lo": 1.39229,
    "muc_tieu": 1.40143,
-   "loi_lo": 2.0,
+   "loi_lo": 2.4,
    "so_le": 5,
    "ly_do": "Sức mạnh ngày ngược chiều mô hình"
   },
   {
-   "cap": "GBP/CHF",
-   "goc": "GBP",
-   "dinh": "CHF",
+   "cap": "CHF/JPY",
+   "goc": "CHF",
+   "dinh": "JPY",
    "huong": "BÁN",
-   "mo_hinh": "sao băng",
+   "mo_hinh": "nhấn chìm giảm + đỉnh nhíp",
    "gio_nen": "01:00 05/11",
-   "chenh": -0.1,
-   "gia": 1.09823,
-   "cat_lo": 1.10305,
-   "muc_tieu": 1.09385,
-   "loi_lo": 0.9,
-   "gia_cho": 1.09937,
-   "so_le": 5,
-   "ly_do": "Sức mạnh ngày ngược chiều mô hình"
-  },
-  {
-   "cap": "EUR/CHF",
-   "goc": "EUR",
-   "dinh": "CHF",
-   "huong": "BÁN",
-   "mo_hinh": "sao băng",
-   "gio_nen": "09:00 05/11",
    "chenh": -0.05,
-   "gia": 0.91647,
-   "cat_lo": 0.92043,
-   "muc_tieu": 0.91262,
-   "loi_lo": 1.0,
-   "gia_cho": 0.9173,
-   "so_le": 5,
+   "gia": 193.952,
+   "cat_lo": 194.388,
+   "muc_tieu": 190.965,
+   "loi_lo": 6.8,
+   "so_le": 3,
    "ly_do": "Sức mạnh ngày ngược chiều mô hình"
   }
  ],
