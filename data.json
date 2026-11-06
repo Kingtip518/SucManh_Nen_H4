@@ -1,41 +1,41 @@
 {
- "cap_nhat": "04:05 07/11/2026",
- "nen_4_gio_dong": "01:00 07/11",
- "ma_nen": 1793988000,
+ "cap_nhat": "05:05 07/11/2026",
+ "nen_4_gio_dong": "05:00 07/11",
+ "ma_nen": 1794002400,
  "so_cap_doc_duoc": 28,
- "cach_do": "từ giá mở cửa ngày",
+ "cach_do": "cả ngày hôm trước",
  "suc_manh": [
   {
    "tien": "USD",
-   "phan_tram": 0.73
-  },
-  {
-   "tien": "CHF",
-   "phan_tram": 0.18
+   "phan_tram": 0.72
   },
   {
    "tien": "JPY",
-   "phan_tram": 0.11
+   "phan_tram": 0.16
+  },
+  {
+   "tien": "CHF",
+   "phan_tram": 0.14
   },
   {
    "tien": "EUR",
-   "phan_tram": -0.03
+   "phan_tram": -0.06
   },
   {
    "tien": "GBP",
-   "phan_tram": -0.11
+   "phan_tram": -0.1
   },
   {
    "tien": "CAD",
-   "phan_tram": -0.14
+   "phan_tram": -0.2
   },
   {
    "tien": "NZD",
-   "phan_tram": -0.38
+   "phan_tram": -0.29
   },
   {
    "tien": "AUD",
-   "phan_tram": -0.38
+   "phan_tram": -0.36
   }
  ],
  "dat": [],
@@ -44,31 +44,31 @@
   {
    "cap": "AUD/USD",
    "huong": "BÁN",
-   "chenh": 1.11,
+   "chenh": 1.08,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
    "cap": "NZD/USD",
    "huong": "BÁN",
-   "chenh": 1.11,
+   "chenh": 1.01,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
    "cap": "USD/CAD",
    "huong": "MUA",
-   "chenh": 0.87,
-   "trang_thai": "Chưa có mô hình đảo chiều"
-  },
-  {
-   "cap": "AUD/CHF",
-   "huong": "BÁN",
-   "chenh": 0.56,
+   "chenh": 0.91,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
    "cap": "AUD/JPY",
    "huong": "BÁN",
-   "chenh": 0.49,
+   "chenh": 0.53,
+   "trang_thai": "Chưa có mô hình đảo chiều"
+  },
+  {
+   "cap": "AUD/CHF",
+   "huong": "BÁN",
+   "chenh": 0.5,
    "trang_thai": "Chưa có mô hình đảo chiều"
   }
  ],
