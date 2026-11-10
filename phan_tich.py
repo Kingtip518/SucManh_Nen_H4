@@ -437,43 +437,40 @@ def so(gia, so_le):
 
 
 def soan_tin_tom_tat(kq):
-    """Tin nhắn đầu tiên: sức mạnh và danh sách lệnh, dòng ngắn cho dễ đọc trên điện thoại."""
-    lon_nhat = max(abs(x["phan_tram"]) for x in kq["suc_manh"]) or 1
-    dong_sm = []
-    for x in kq["suc_manh"]:
-        dai = round(abs(x["phan_tram"]) / lon_nhat * 8)
-        thanh = ("█" if x["phan_tram"] >= 0 else "░") * max(dai, 1)
-        dong_sm.append(f"{x['tien']} {x['phan_tram']:+.2f}  {thanh}")
-    t = ["📊 <b>BÁO CÁO NẾN 4 GIỜ</b>",
-         f"Nến đóng lúc <b>{kq['nen_4_gio_dong']}</b>", "",
-         f"<b>Sức mạnh tiền tệ</b> ({kq['cach_do']})",
-         "<pre>" + "\n".join(dong_sm) + "</pre>"]
-    ng = kq.get("nguong")
-    if ng:
-        t.append(f"Ngưỡng sức mạnh: {ng['tien_manh']} cần ≥ {ng['manh']:+.2f} {'✅' if ng['manh_dat'] else '❌'} · "
-                 f"{ng['tien_yeu']} cần ≤ {ng['yeu']:+.2f} {'✅' if ng['yeu_dat'] else '❌'}")
-    t.append("")
-    t.append("<b>5 cặp mạnh – yếu đang theo dõi</b>")
-    for x in kq.get("theo_doi", []):
-        dau = "🟢" if x["huong"] == "MUA" else "🔴"
-        co = "✅ " + x["trang_thai"] if x["trang_thai"] != "Chưa có mô hình đảo chiều" else "chờ mô hình"
-        if not x.get("du_nguong", True):
-            co = "⛔ sức mạnh chưa đủ ngưỡng" + (f" (có {x['trang_thai']})" if x["trang_thai"] != "Chưa có mô hình đảo chiều" else "")
-        t.append(f"{dau} {x['huong']} {x['cap']} · {co}")
-    t.append("")
-    if not kq["dat"]:
-        t += ["Chưa cặp nào vừa đủ ngưỡng sức mạnh vừa có mô hình nến đảo chiều đúng hướng."]
-    else:
-        t.append(f"<b>{len(kq['dat'])} lệnh đề xuất</b> (ảnh chi tiết ở tin sau)")
-        for k, d in enumerate(kq["dat"], 1):
+    """Tin nhắn đầu tiên, gọn cho điện thoại: sức mạnh 1 dòng, mỗi cặp chỉ xuất hiện 1 lần."""
+    ng = kq.get("nguong") or {}
+    sm = kq["suc_manh"]
+    dau_manh = (" ✅" if ng.get("manh_dat") else " ❌") if ng else ""
+    dau_yeu = (" ✅" if ng.get("yeu_dat") else " ❌") if ng else ""
+    t = [f"📊 <b>NẾN 4 GIỜ ĐÓNG {kq['nen_4_gio_dong']}</b>",
+         f"💪 Mạnh nhất <b>{sm[0]['tien']} {sm[0]['phan_tram']:+.2f}</b>{dau_manh}  ·  "
+         f"Yếu nhất <b>{sm[-1]['tien']} {sm[-1]['phan_tram']:+.2f}</b>{dau_yeu}",
+         "<i>" + "  ".join(f"{x['tien']} {x['phan_tram']:+.2f}" for x in sm) + "</i>", ""]
+
+    if kq["dat"]:
+        t.append(f"🎯 <b>LỆNH ({len(kq['dat'])})</b>")
+        for d in kq["dat"]:
             dau = "🟢" if d["huong"] == "MUA" else "🔴"
-            t.append(f"{dau} <b>{d['huong']} {d['cap']}</b> · {d['mo_hinh']}" + (" ➕ <b>nhấn chìm 1 giờ</b>" if d.get("h1") else ""))
-    if kq["canh_bao"]:
-        t += ["", "⚠️ <b>Lưu ý</b>"]
-        for c in kq["canh_bao"]:
-            t.append("• " + c.split(". Nếu")[0] + " → nên chia nhỏ khối lượng")
+            mo_hinh = d["mo_hinh"].replace(" + ", ", ")
+            t.append(f"{dau} <b>{d['huong']} {d['cap']}</b> — {mo_hinh}" + (" <b>+ xác nhận 1 giờ</b>" if d.get("h1") else ""))
+    else:
+        t.append("🎯 Chưa có lệnh")
+
+    cho, thieu = [], []
+    for x in kq.get("theo_doi", []):
+        if any(d["cap"] == x["cap"] for d in kq["dat"]):
+            continue
+        ten = f"{x['huong'].lower()} {x['cap']}"
+        (thieu if not x.get("du_nguong", True) else cho).append(ten)
+    if cho:
+        t.append("⏳ Chờ mô hình: " + ", ".join(cho))
+    if thieu:
+        t.append("⛔ Chưa đủ ngưỡng sức mạnh: " + ", ".join(thieu))
+
+    for c in kq["canh_bao"]:
+        t.append("⚠️ " + c.split(". Nếu")[0].replace("Đang mua", "Mua").replace("Đang bán", "Bán") + " → chia nhỏ khối lượng")
     if DIA_CHI_WEB:
-        t += ["", f'<a href="{DIA_CHI_WEB}">Mở trang Bàn Ghép Cặp H4</a>']
+        t += ["", f'<a href="{DIA_CHI_WEB}">Xem biểu đồ trên web</a>']
     return "\n".join(t)[:4000]
 
 
