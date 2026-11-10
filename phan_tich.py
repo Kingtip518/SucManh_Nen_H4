@@ -442,10 +442,18 @@ def soan_tin_tom_tat(kq):
     sm = kq["suc_manh"]
     dau_manh = (" ✅" if ng.get("manh_dat") else " ❌") if ng else ""
     dau_yeu = (" ✅" if ng.get("yeu_dat") else " ❌") if ng else ""
-    t = [f"📊 <b>NẾN 4 GIỜ ĐÓNG {kq['nen_4_gio_dong']}</b>",
-         f"💪 Mạnh nhất <b>{sm[0]['tien']} {sm[0]['phan_tram']:+.2f}</b>{dau_manh}  ·  "
-         f"Yếu nhất <b>{sm[-1]['tien']} {sm[-1]['phan_tram']:+.2f}</b>{dau_yeu}",
-         "<i>" + "  ".join(f"{x['tien']} {x['phan_tram']:+.2f}" for x in sm) + "</i>", ""]
+    lon_nhat = max(abs(x["phan_tram"]) for x in sm) or 1
+    dong_sm = []
+    for x in sm:
+        dai = round(abs(x["phan_tram"]) / lon_nhat * 8)
+        thanh = ("█" if x["phan_tram"] >= 0 else "░") * max(dai, 1)
+        dong_sm.append(f"{x['tien']} {x['phan_tram']:+.2f}  {thanh}")
+    t = [f"📊 <b>NẾN 4 GIỜ ĐÓNG {kq['nen_4_gio_dong']}</b>", "",
+         f"<b>Sức mạnh tiền tệ</b> ({kq['cach_do']})",
+         "<pre>" + "\n".join(dong_sm) + "</pre>"]
+    if ng:
+        t.append(f"Ngưỡng ±0.30: {sm[0]['tien']}{dau_manh} · {sm[-1]['tien']}{dau_yeu}")
+    t.append("")
 
     if kq["dat"]:
         t.append(f"🎯 <b>LỆNH ({len(kq['dat'])})</b>")
