@@ -51,6 +51,7 @@ button:focus-visible{outline:2px solid var(--chinh);outline-offset:2px}
 .cs span:first-child{color:var(--phu)}
 .bdbox{width:100%;min-width:0}
 .bd{display:block}
+.giaco{background:var(--mua-nen);color:var(--mua);font-size:13px;font-weight:600;border-radius:8px;padding:6px 10px}
 .cho{background:var(--canh-nen);color:var(--canh);font-size:13px;border-radius:8px;padding:6px 10px}
 .canhbao{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
 .canhbao li{background:var(--canh-nen);color:var(--canh);border-radius:8px;padding:9px 12px;font-size:14px}
@@ -78,8 +79,10 @@ tr:last-child td{border-bottom:none}
 
   <section>
     <h2 id="tieuDeSucManh">Sức mạnh tiền tệ (% từ giá mở cửa ngày)</h2>
+    <p id="nguong" style="margin:4px 0 10px;color:var(--phu)"></p>
     <div class="sm" id="sucManh"></div>
   </section>
+
 
   <section>
     <h2>Lệnh đề xuất</h2>
@@ -104,6 +107,7 @@ tr:last-child td{border-bottom:none}
     <ol>
       <li>Tìm mô hình nến đảo chiều (nhấn chìm, búa, sao băng, sao mai, sao hôm, đáy nhíp, đỉnh nhíp, xuyên đâm, mây đen, quét đáy, quét đỉnh, phá giả nến mẹ, ba nến trong, ba lính trắng, ba quạ đen) trên <span id="cdGan">3</span> nến 4 giờ vừa đóng, nằm ở đỉnh hoặc đáy của <span id="cdDinh">12</span> nến gần nhất, và giá chưa phá qua đỉnh hoặc đáy của mô hình.</li>
       <li>Chỉ xét 5 cặp: đồng mạnh nhất ghép với 3 đồng yếu nhất, và đồng yếu nhất ghép với 3 đồng mạnh nhất. Luôn mua đồng mạnh, bán đồng yếu, và chỉ nhận mô hình nến cùng hướng. Sức mạnh tính giống bảng MarketMilk: % thay đổi từ giá mở cửa ngày của sàn (05:00 giờ Việt Nam vào mùa đông, 04:00 vào mùa hè). Trong 2 giờ đầu ngày, khi sức mạnh chưa hình thành, dùng sức mạnh của cả ngày vừa kết thúc.</li>
+      <li>Ngưỡng sức mạnh: đồng mạnh nhất phải từ +0,3% trở lên, đồng yếu nhất phải từ −0,3% trở xuống. Ba cặp ghép với đồng mạnh nhất chỉ được tính khi đồng mạnh nhất đủ ngưỡng; hai cặp ghép với đồng yếu nhất chỉ được tính khi đồng yếu nhất đủ ngưỡng. Cặp chưa đủ ngưỡng vẫn hiện trong bảng theo dõi nhưng không đưa vào lệnh đề xuất.</li>
       <li>Cắt lỗ đặt ngoài đỉnh hoặc đáy mô hình. Mục tiêu là đỉnh hoặc đáy của <span id="cdMuc">20</span> nến 4 giờ gần nhất. Giá chờ là mức nên đợi giá hồi về để lời/lỗ đạt 1:1,5.</li>
     </ol>
     <p>Nến lấy theo giờ sàn MT5 phổ biến (0 giờ sàn = 5 giờ chiều New York), có thể lệch vài pip so với sàn của anh. Đây là công cụ tham khảo, không phải lời khuyên đầu tư.</p>
@@ -125,7 +129,7 @@ function veSucManh(ds){
   }).join('');
 }
 function veLenh(ds){
-  if(!ds.length){$('lenh').innerHTML='<div class="trong">Trong 5 cặp mạnh – yếu, chưa cặp nào có mô hình nến đảo chiều đúng hướng. Chờ nến tiếp theo.</div>';return;}
+  if(!ds.length){$('lenh').innerHTML='<div class="trong">Trong 5 cặp mạnh – yếu, chưa cặp nào vừa đủ ngưỡng sức mạnh vừa có mô hình nến đảo chiều đúng hướng. Chờ nến tiếp theo.</div>';return;}
   $('lenh').innerHTML=ds.map((d,k)=>`<article class="the">
     <div class="tren"><span class="huong ${d.huong}">${d.huong}</span><span class="cap">${d.cap}</span><span class="stt">#${k+1}</span></div>
     <div class="mh">${d.mo_hinh} · nến đóng ${d.gio_nen}</div>
@@ -137,6 +141,7 @@ function veLenh(ds){
       <div><span>Mục tiêu</span><span class="so">${d.muc_tieu}</span></div>
       <div><span>Lời/lỗ</span><span class="so">1:${so(d.loi_lo)}</span></div>
     </div>
+    ${d.h1?`<div class="giaco">➕ Gia cố: ${d.h1}</div>`:''}
     ${d.gia_cho?`<div class="cho">Nên chờ giá hồi về <b class="so">${d.gia_cho}</b> để lời/lỗ đạt 1:1,5</div>`:''}
   </article>`).join('');
   document.querySelectorAll('canvas.bd').forEach(c=>veBieuDo(c,ds[+c.dataset.k]));
@@ -167,7 +172,7 @@ function veBieuDo(cv,d){
   g.strokeStyle=VIEN;g.strokeRect(0.5,0.5,W-PH,H-1);
 }
 function veLoai(ds){
-  $('loai').innerHTML=ds.length?ds.map(d=>`<tr><td><b>${d.cap}</b></td><td><span class="huong ${d.huong}">${d.huong}</span></td><td class="so">${so(d.chenh.toFixed(2))}</td><td>${d.trang_thai==='Chưa có mô hình đảo chiều'?'<span style="color:var(--phu)">Chờ mô hình</span>':'<b>'+d.trang_thai+'</b>'}</td></tr>`).join('')
+  $('loai').innerHTML=ds.length?ds.map(d=>`<tr><td><b>${d.cap}</b></td><td><span class="huong ${d.huong}">${d.huong}</span></td><td class="so">${so(d.chenh.toFixed(2))}</td><td>${d.du_nguong===false?'<span style="color:var(--phu)">⛔ Sức mạnh chưa đủ ngưỡng'+(d.trang_thai==='Chưa có mô hình đảo chiều'?'':' (có '+d.trang_thai+')')+'</span>':d.trang_thai==='Chưa có mô hình đảo chiều'?'<span style="color:var(--phu)">Chờ mô hình</span>':'<b>'+d.trang_thai+'</b>'}</td></tr>`).join('')
     :'<tr><td colspan="4">Chưa có dữ liệu.</td></tr>';
 }
 async function tai(){
@@ -178,6 +183,8 @@ async function tai(){
     $('trangthai').textContent=`Cập nhật ${d.cap_nhat} · nến 4 giờ vừa đóng lúc ${d.nen_4_gio_dong} (giờ Việt Nam) · đọc được ${d.so_cap_doc_duoc}/28 cặp`;
     $('mau').hidden=!d.du_lieu_mau;
     $('tieuDeSucManh').textContent='Sức mạnh tiền tệ (% '+(d.cach_do||'từ giá mở cửa ngày')+')';
+    const ng=d.nguong;
+    $('nguong').innerHTML=ng?`Ngưỡng sức mạnh: <b>${ng.tien_manh}</b> cần ≥ ${ng.manh>0?'+':''}${ng.manh.toFixed(2)} ${ng.manh_dat?'✅':'❌'} · <b>${ng.tien_yeu}</b> cần ≤ ${ng.yeu.toFixed(2)} ${ng.yeu_dat?'✅':'❌'}`:'';
     veSucManh(d.suc_manh); veLenh(d.dat); veLoai(d.theo_doi||[]);
     $('khuCanhBao').hidden=!(d.canh_bao&&d.canh_bao.length);
     $('canhBao').innerHTML=(d.canh_bao||[]).map(c=>`<li>${c}</li>`).join('');
