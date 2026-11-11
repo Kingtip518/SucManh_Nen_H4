@@ -1,5 +1,5 @@
 {
- "cap_nhat": "17:05 11/11/2026",
+ "cap_nhat": "20:05 11/11/2026",
  "nen_4_gio_dong": "17:00 11/11",
  "ma_nen": 1794391200,
  "so_cap_doc_duoc": 28,
@@ -7,81 +7,81 @@
  "nguong": {
   "manh": 0.3,
   "yeu": -0.3,
-  "manh_dat": false,
-  "yeu_dat": false,
+  "manh_dat": true,
+  "yeu_dat": true,
   "tien_manh": "USD",
   "tien_yeu": "CHF"
  },
  "suc_manh": [
   {
    "tien": "USD",
-   "phan_tram": 0.21
+   "phan_tram": 0.33
   },
   {
    "tien": "AUD",
-   "phan_tram": 0.21
+   "phan_tram": 0.2
   },
   {
    "tien": "GBP",
-   "phan_tram": 0.05
-  },
-  {
-   "tien": "JPY",
-   "phan_tram": -0.01
+   "phan_tram": 0.03
   },
   {
    "tien": "EUR",
-   "phan_tram": -0.01
+   "phan_tram": -0.0
+  },
+  {
+   "tien": "JPY",
+   "phan_tram": -0.05
   },
   {
    "tien": "CAD",
-   "phan_tram": -0.04
+   "phan_tram": -0.07
   },
   {
    "tien": "NZD",
-   "phan_tram": -0.15
+   "phan_tram": -0.09
   },
   {
    "tien": "CHF",
-   "phan_tram": -0.25
+   "phan_tram": -0.35
   }
  ],
  "dat": [],
  "loai": [],
  "theo_doi": [
   {
-   "cap": "AUD/CHF",
+   "cap": "USD/CHF",
    "huong": "MUA",
-   "chenh": 0.46,
-   "du_nguong": false,
+   "chenh": 0.68,
+   "du_nguong": true,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
-   "cap": "USD/CHF",
+   "cap": "AUD/CHF",
    "huong": "MUA",
-   "chenh": 0.46,
-   "du_nguong": false,
+   "chenh": 0.56,
+   "du_nguong": true,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
    "cap": "NZD/USD",
    "huong": "BÁN",
-   "chenh": 0.36,
-   "du_nguong": false,
-   "trang_thai": "Chưa có mô hình đảo chiều"
-  },
-  {
-   "cap": "GBP/CHF",
-   "huong": "MUA",
-   "chenh": 0.3,
-   "du_nguong": false,
+   "chenh": 0.41,
+   "du_nguong": true,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
    "cap": "USD/CAD",
    "huong": "MUA",
-   "chenh": 0.25,
-   "du_nguong": false,
+   "chenh": 0.4,
+   "du_nguong": true,
+   "trang_thai": "Chưa có mô hình đảo chiều"
+  },
+  {
+   "cap": "GBP/CHF",
+   "huong": "MUA",
+   "chenh": 0.39,
+   "du_nguong": true,
    "trang_thai": "Chưa có mô hình đảo chiều"
   }
  ],
