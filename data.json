@@ -1,5 +1,5 @@
 {
- "cap_nhat": "13:05 11/11/2026",
+ "cap_nhat": "16:05 11/11/2026",
  "nen_4_gio_dong": "13:00 11/11",
  "ma_nen": 1794376800,
  "so_cap_doc_duoc": 28,
@@ -15,35 +15,35 @@
  "suc_manh": [
   {
    "tien": "AUD",
-   "phan_tram": 0.18
-  },
-  {
-   "tien": "NZD",
-   "phan_tram": 0.11
+   "phan_tram": 0.24
   },
   {
    "tien": "USD",
-   "phan_tram": 0.04
-  },
-  {
-   "tien": "EUR",
-   "phan_tram": 0.01
-  },
-  {
-   "tien": "GBP",
-   "phan_tram": 0.01
+   "phan_tram": 0.17
   },
   {
    "tien": "JPY",
-   "phan_tram": -0.06
+   "phan_tram": 0.03
+  },
+  {
+   "tien": "EUR",
+   "phan_tram": 0.0
+  },
+  {
+   "tien": "NZD",
+   "phan_tram": -0.04
+  },
+  {
+   "tien": "GBP",
+   "phan_tram": -0.05
   },
   {
    "tien": "CAD",
-   "phan_tram": -0.14
+   "phan_tram": -0.06
   },
   {
    "tien": "CHF",
-   "phan_tram": -0.15
+   "phan_tram": -0.29
   }
  ],
  "dat": [],
@@ -52,37 +52,37 @@
   {
    "cap": "AUD/CHF",
    "huong": "MUA",
-   "chenh": 0.33,
-   "du_nguong": false,
-   "trang_thai": "Chưa có mô hình đảo chiều"
-  },
-  {
-   "cap": "AUD/CAD",
-   "huong": "MUA",
-   "chenh": 0.31,
-   "du_nguong": false,
-   "trang_thai": "Chưa có mô hình đảo chiều"
-  },
-  {
-   "cap": "NZD/CHF",
-   "huong": "MUA",
-   "chenh": 0.27,
-   "du_nguong": false,
-   "trang_thai": "Chưa có mô hình đảo chiều"
-  },
-  {
-   "cap": "AUD/JPY",
-   "huong": "MUA",
-   "chenh": 0.23,
+   "chenh": 0.52,
    "du_nguong": false,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
    "cap": "USD/CHF",
    "huong": "MUA",
-   "chenh": 0.19,
+   "chenh": 0.46,
    "du_nguong": false,
    "trang_thai": "Chưa có mô hình đảo chiều"
+  },
+  {
+   "cap": "CHF/JPY",
+   "huong": "BÁN",
+   "chenh": 0.32,
+   "du_nguong": false,
+   "trang_thai": "Chưa có mô hình đảo chiều"
+  },
+  {
+   "cap": "AUD/CAD",
+   "huong": "MUA",
+   "chenh": 0.3,
+   "du_nguong": false,
+   "trang_thai": "Chưa có mô hình đảo chiều"
+  },
+  {
+   "cap": "GBP/AUD",
+   "huong": "BÁN",
+   "chenh": 0.29,
+   "du_nguong": false,
+   "trang_thai": "sao hôm"
   }
  ],
  "canh_bao": [],
