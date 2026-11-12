@@ -1,9 +1,9 @@
 {
- "cap_nhat": "04:05 13/11/2026",
- "nen_4_gio_dong": "01:00 13/11",
- "ma_nen": 1794506400,
+ "cap_nhat": "05:05 13/11/2026",
+ "nen_4_gio_dong": "05:00 13/11",
+ "ma_nen": 1794520800,
  "so_cap_doc_duoc": 28,
- "cach_do": "từ giá mở cửa ngày",
+ "cach_do": "cả ngày hôm trước",
  "nguong": {
   "manh": 0.3,
   "yeu": -0.3,
@@ -15,35 +15,35 @@
  "suc_manh": [
   {
    "tien": "USD",
-   "phan_tram": 0.29
+   "phan_tram": 0.27
+  },
+  {
+   "tien": "JPY",
+   "phan_tram": 0.22
   },
   {
    "tien": "CAD",
    "phan_tram": 0.19
   },
   {
-   "tien": "JPY",
-   "phan_tram": 0.17
+   "tien": "CHF",
+   "phan_tram": -0.05
   },
   {
    "tien": "GBP",
-   "phan_tram": -0.03
-  },
-  {
-   "tien": "EUR",
-   "phan_tram": -0.06
-  },
-  {
-   "tien": "CHF",
    "phan_tram": -0.07
   },
   {
+   "tien": "EUR",
+   "phan_tram": -0.09
+  },
+  {
    "tien": "NZD",
-   "phan_tram": -0.08
+   "phan_tram": -0.1
   },
   {
    "tien": "AUD",
-   "phan_tram": -0.41
+   "phan_tram": -0.38
   }
  ],
  "dat": [],
@@ -52,35 +52,35 @@
   {
    "cap": "AUD/USD",
    "huong": "BÁN",
-   "chenh": 0.7,
-   "du_nguong": true,
-   "trang_thai": "Chưa có mô hình đảo chiều"
-  },
-  {
-   "cap": "AUD/CAD",
-   "huong": "BÁN",
-   "chenh": 0.6,
+   "chenh": 0.65,
    "du_nguong": true,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
    "cap": "AUD/JPY",
    "huong": "BÁN",
-   "chenh": 0.58,
+   "chenh": 0.6,
    "du_nguong": true,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
-   "cap": "NZD/USD",
+   "cap": "AUD/CAD",
+   "huong": "BÁN",
+   "chenh": 0.57,
+   "du_nguong": true,
+   "trang_thai": "Chưa có mô hình đảo chiều"
+  },
+  {
+   "cap": "EUR/USD",
    "huong": "BÁN",
    "chenh": 0.37,
    "du_nguong": false,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
-   "cap": "USD/CHF",
-   "huong": "MUA",
-   "chenh": 0.35,
+   "cap": "NZD/USD",
+   "huong": "BÁN",
+   "chenh": 0.37,
    "du_nguong": false,
    "trang_thai": "Chưa có mô hình đảo chiều"
   }
