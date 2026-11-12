@@ -1,7 +1,7 @@
 {
- "cap_nhat": "12:05 12/11/2026",
- "nen_4_gio_dong": "09:00 12/11",
- "ma_nen": 1794448800,
+ "cap_nhat": "13:05 12/11/2026",
+ "nen_4_gio_dong": "13:00 12/11",
+ "ma_nen": 1794463200,
  "so_cap_doc_duoc": 28,
  "cach_do": "từ giá mở cửa ngày",
  "nguong": {
@@ -9,29 +9,29 @@
   "yeu": -0.3,
   "manh_dat": false,
   "yeu_dat": false,
-  "tien_manh": "JPY",
+  "tien_manh": "USD",
   "tien_yeu": "NZD"
  },
  "suc_manh": [
+  {
+   "tien": "USD",
+   "phan_tram": 0.09
+  },
   {
    "tien": "JPY",
    "phan_tram": 0.08
   },
   {
-   "tien": "USD",
+   "tien": "CHF",
    "phan_tram": 0.08
   },
   {
-   "tien": "CHF",
-   "phan_tram": 0.04
+   "tien": "EUR",
+   "phan_tram": 0.0
   },
   {
    "tien": "CAD",
-   "phan_tram": -0.02
-  },
-  {
-   "tien": "EUR",
-   "phan_tram": -0.03
+   "phan_tram": -0.01
   },
   {
    "tien": "GBP",
@@ -39,11 +39,11 @@
   },
   {
    "tien": "AUD",
-   "phan_tram": -0.05
+   "phan_tram": -0.09
   },
   {
    "tien": "NZD",
-   "phan_tram": -0.07
+   "phan_tram": -0.12
   }
  ],
  "dat": [],
@@ -52,35 +52,35 @@
   {
    "cap": "NZD/USD",
    "huong": "BÁN",
-   "chenh": 0.15,
-   "du_nguong": false,
-   "trang_thai": "Chưa có mô hình đảo chiều"
-  },
-  {
-   "cap": "NZD/JPY",
-   "huong": "BÁN",
-   "chenh": 0.15,
-   "du_nguong": false,
-   "trang_thai": "Chưa có mô hình đảo chiều"
-  },
-  {
-   "cap": "AUD/JPY",
-   "huong": "BÁN",
-   "chenh": 0.14,
-   "du_nguong": false,
-   "trang_thai": "Chưa có mô hình đảo chiều"
-  },
-  {
-   "cap": "GBP/JPY",
-   "huong": "BÁN",
-   "chenh": 0.12,
+   "chenh": 0.22,
    "du_nguong": false,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
    "cap": "NZD/CHF",
    "huong": "BÁN",
-   "chenh": 0.11,
+   "chenh": 0.2,
+   "du_nguong": false,
+   "trang_thai": "Chưa có mô hình đảo chiều"
+  },
+  {
+   "cap": "NZD/JPY",
+   "huong": "BÁN",
+   "chenh": 0.2,
+   "du_nguong": false,
+   "trang_thai": "Chưa có mô hình đảo chiều"
+  },
+  {
+   "cap": "AUD/USD",
+   "huong": "BÁN",
+   "chenh": 0.19,
+   "du_nguong": false,
+   "trang_thai": "Chưa có mô hình đảo chiều"
+  },
+  {
+   "cap": "GBP/USD",
+   "huong": "BÁN",
+   "chenh": 0.12,
    "du_nguong": false,
    "trang_thai": "Chưa có mô hình đảo chiều"
   }
