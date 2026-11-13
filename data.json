@@ -1,7 +1,7 @@
 {
- "cap_nhat": "20:05 13/11/2026",
- "nen_4_gio_dong": "17:00 13/11",
- "ma_nen": 1794564000,
+ "cap_nhat": "21:05 13/11/2026",
+ "nen_4_gio_dong": "21:00 13/11",
+ "ma_nen": 1794578400,
  "so_cap_doc_duoc": 28,
  "cach_do": "từ giá mở cửa ngày",
  "nguong": {
@@ -9,60 +9,46 @@
   "yeu": -0.3,
   "manh_dat": false,
   "yeu_dat": false,
-  "tien_manh": "EUR",
+  "tien_manh": "CAD",
   "tien_yeu": "CHF"
  },
  "suc_manh": [
   {
+   "tien": "CAD",
+   "phan_tram": 0.16
+  },
+  {
    "tien": "EUR",
-   "phan_tram": 0.17
+   "phan_tram": 0.13
   },
   {
    "tien": "USD",
-   "phan_tram": 0.17
-  },
-  {
-   "tien": "CAD",
-   "phan_tram": 0.15
+   "phan_tram": 0.13
   },
   {
    "tien": "GBP",
-   "phan_tram": 0.12
+   "phan_tram": 0.13
   },
   {
    "tien": "JPY",
-   "phan_tram": -0.0
+   "phan_tram": 0.04
   },
   {
    "tien": "NZD",
-   "phan_tram": -0.1
+   "phan_tram": -0.12
   },
   {
    "tien": "AUD",
-   "phan_tram": -0.21
+   "phan_tram": -0.18
   },
   {
    "tien": "CHF",
-   "phan_tram": -0.29
+   "phan_tram": -0.28
   }
  ],
  "dat": [],
  "loai": [],
  "theo_doi": [
-  {
-   "cap": "EUR/CHF",
-   "huong": "MUA",
-   "chenh": 0.45,
-   "du_nguong": false,
-   "trang_thai": "Chưa có mô hình đảo chiều"
-  },
-  {
-   "cap": "USD/CHF",
-   "huong": "MUA",
-   "chenh": 0.45,
-   "du_nguong": false,
-   "trang_thai": "Chưa có mô hình đảo chiều"
-  },
   {
    "cap": "CAD/CHF",
    "huong": "MUA",
@@ -71,16 +57,30 @@
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
-   "cap": "EUR/AUD",
+   "cap": "EUR/CHF",
    "huong": "MUA",
-   "chenh": 0.37,
+   "chenh": 0.41,
    "du_nguong": false,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
-   "cap": "EUR/NZD",
+   "cap": "USD/CHF",
    "huong": "MUA",
-   "chenh": 0.26,
+   "chenh": 0.41,
+   "du_nguong": false,
+   "trang_thai": "Chưa có mô hình đảo chiều"
+  },
+  {
+   "cap": "AUD/CAD",
+   "huong": "BÁN",
+   "chenh": 0.34,
+   "du_nguong": false,
+   "trang_thai": "Chưa có mô hình đảo chiều"
+  },
+  {
+   "cap": "NZD/CAD",
+   "huong": "BÁN",
+   "chenh": 0.28,
    "du_nguong": false,
    "trang_thai": "Chưa có mô hình đảo chiều"
   }
