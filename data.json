@@ -1,5 +1,5 @@
 {
- "cap_nhat": "01:05 18/11/2026",
+ "cap_nhat": "04:05 18/11/2026",
  "nen_4_gio_dong": "01:00 18/11",
  "ma_nen": 1794938400,
  "so_cap_doc_duoc": 28,
@@ -10,79 +10,79 @@
   "manh_dat": false,
   "yeu_dat": false,
   "tien_manh": "GBP",
-  "tien_yeu": "USD"
+  "tien_yeu": "CHF"
  },
  "suc_manh": [
   {
    "tien": "GBP",
-   "phan_tram": 0.19
+   "phan_tram": 0.18
   },
   {
    "tien": "EUR",
-   "phan_tram": 0.11
-  },
-  {
-   "tien": "NZD",
-   "phan_tram": 0.01
+   "phan_tram": 0.07
   },
   {
    "tien": "CAD",
-   "phan_tram": -0.02
-  },
-  {
-   "tien": "CHF",
-   "phan_tram": -0.03
+   "phan_tram": 0.0
   },
   {
    "tien": "JPY",
-   "phan_tram": -0.05
-  },
-  {
-   "tien": "AUD",
-   "phan_tram": -0.06
+   "phan_tram": 0.0
   },
   {
    "tien": "USD",
-   "phan_tram": -0.16
+   "phan_tram": -0.02
+  },
+  {
+   "tien": "AUD",
+   "phan_tram": -0.04
+  },
+  {
+   "tien": "NZD",
+   "phan_tram": -0.1
+  },
+  {
+   "tien": "CHF",
+   "phan_tram": -0.1
   }
  ],
  "dat": [],
  "loai": [],
  "theo_doi": [
   {
-   "cap": "GBP/USD",
-   "huong": "MUA",
-   "chenh": 0.35,
-   "du_nguong": false,
-   "trang_thai": "búa"
-  },
-  {
-   "cap": "EUR/USD",
+   "cap": "GBP/NZD",
    "huong": "MUA",
    "chenh": 0.27,
-   "du_nguong": false,
-   "trang_thai": "nhấn chìm tăng"
-  },
-  {
-   "cap": "GBP/AUD",
-   "huong": "MUA",
-   "chenh": 0.25,
    "du_nguong": false,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
-   "cap": "GBP/JPY",
+   "cap": "GBP/CHF",
    "huong": "MUA",
-   "chenh": 0.24,
+   "chenh": 0.27,
    "du_nguong": false,
-   "trang_thai": "nhấn chìm tăng"
+   "trang_thai": "búa"
   },
   {
-   "cap": "NZD/USD",
+   "cap": "GBP/AUD",
+   "huong": "MUA",
+   "chenh": 0.22,
+   "du_nguong": false,
+   "trang_thai": "Chưa có mô hình đảo chiều"
+  },
+  {
+   "cap": "EUR/CHF",
    "huong": "MUA",
    "chenh": 0.17,
    "du_nguong": false,
-   "trang_thai": "nhấn chìm tăng"
+   "trang_thai": "nhấn chìm tăng + quét đáy"
+  },
+  {
+   "cap": "CAD/CHF",
+   "huong": "MUA",
+   "chenh": 0.1,
+   "du_nguong": false,
+   "trang_thai": "Chưa có mô hình đảo chiều"
   }
  ],
  "canh_bao": [],
