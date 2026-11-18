@@ -522,54 +522,48 @@ def so(gia, so_le):
 
 
 def soan_tin_tom_tat(kq):
-    """Tin nhắn đầu tiên: sức mạnh, 5 cặp theo dõi, lệnh đề xuất — mỗi vùng ngăn cách bằng đường kẻ."""
-    KE = "━━━━━━━━━━━━━━━"
+    """Tin nhắn đầu tiên, gọn cho điện thoại: sức mạnh, tin tác động cao, 5 cặp theo dõi."""
+    KE = "━━━━━━━━━━"
     lon_nhat = max(abs(x["phan_tram"]) for x in kq["suc_manh"]) or 1
     dong_sm = []
     for x in kq["suc_manh"]:
         dai = round(abs(x["phan_tram"]) / lon_nhat * 8)
         thanh = ("█" if x["phan_tram"] >= 0 else "░") * max(dai, 1)
         dong_sm.append(f"{x['tien']} {x['phan_tram']:+.2f}  {thanh}")
-    t = ["📊 <b>BÁO CÁO NẾN 4 GIỜ</b>",
-         f"Nến đóng lúc <b>{kq['nen_4_gio_dong']}</b>", "",
-         f"<b>Sức mạnh tiền tệ</b> ({kq['cach_do']})",
+    t = [f"📊 <b>NẾN 4 GIỜ ĐÓNG {kq['nen_4_gio_dong']}</b>",
+         f"Sức mạnh tiền tệ ({kq['cach_do']})",
          "<pre>" + "\n".join(dong_sm) + "</pre>"]
     ng = kq.get("nguong")
     if ng:
-        t.append(f"Ngưỡng sức mạnh: {ng['tien_manh']} cần ≥ {ng['manh']:+.2f} {'✅' if ng['manh_dat'] else '❌'} · "
-                 f"{ng['tien_yeu']} cần ≤ {ng['yeu']:+.2f} {'✅' if ng['yeu_dat'] else '❌'}")
+        t.append(f"Ngưỡng ±0.30: {ng['tien_manh']} {'✅' if ng['manh_dat'] else '❌'} · "
+                 f"{ng['tien_yeu']} {'✅' if ng['yeu_dat'] else '❌'}")
 
     tin = kq.get("tin_cao")
     if tin is not None:
-        t += ["", KE, "📅 <b>TIN TÁC ĐỘNG CAO HÔM NAY</b>", ""]
+        t += [KE, "📅 <b>Tin tác động cao hôm nay</b>"]
         if not tin:
-            t.append("Không có tin tác động cao")
-        for x in tin:
-            so_lieu = " · ".join(p for p in (f"dự báo {x['du_bao']}" if x["du_bao"] else "",
-                                             f"kỳ trước {x['ky_truoc']}" if x["ky_truoc"] else "") if p)
-            t.append(f"{'✔️' if x['da_ra'] else '⏰'} {x['gio']} <b>{x['tien']}</b> · {x['ten']}"
-                     + (f" ({so_lieu})" if so_lieu else "") + (" · đã ra" if x["da_ra"] else ""))
-    t += ["", KE, "👀 <b>5 CẶP MẠNH – YẾU ĐANG THEO DÕI</b>", ""]
+            t.append("<i>Không có</i>")
+        else:
+            t.append("<blockquote expandable>" + "\n".join(
+                f"{'✔️' if x['da_ra'] else '⏰'} {x['gio']} {x['tien']} · {x['ten']}" for x in tin) + "</blockquote>")
+
+    lenh = {d["cap"]: d for d in kq["dat"]}
+    t += [KE, "👀 <b>5 cặp mạnh – yếu</b>"]
     for x in kq.get("theo_doi", []):
         dau = "🟢" if x["huong"] == "MUA" else "🔴"
-        co = "✅ " + x["trang_thai"] if x["trang_thai"] != "Chưa có mô hình đảo chiều" else "chờ mô hình"
+        d = lenh.get(x["cap"])
+        if d:
+            co = f"✅ <b>{d['mo_hinh']}</b>" + (" ➕ nhấn chìm 1 giờ" if d.get("h1") else "")
+        elif x["trang_thai"] != "Chưa có mô hình đảo chiều":
+            co = x["trang_thai"]
+        else:
+            co = "chờ mô hình"
         t.append(f"{dau} {x['huong']} {x['cap']} · {co}" + (f" 🚨 <b>TIN {x['tin']}</b>" if x.get("tin") else ""))
 
-    t += ["", KE]
-    if not kq["dat"]:
-        t += ["🎯 <b>LỆNH ĐỀ XUẤT</b>", "", "Chưa cặp nào vừa đủ ngưỡng sức mạnh vừa có mô hình nến đảo chiều đúng hướng."]
-    else:
-        t += [f"🎯 <b>{len(kq['dat'])} LỆNH ĐỀ XUẤT</b> (ảnh chi tiết ở tin sau)", ""]
-        for d in kq["dat"]:
-            dau = "🟢" if d["huong"] == "MUA" else "🔴"
-            t.append(f"{dau} <b>{d['huong']} {d['cap']}</b> · {d['mo_hinh']}" + (" ➕ <b>nhấn chìm 1 giờ</b>" if d.get("h1") else "")
-                     + (f" 🚨 <b>TIN {d['tin']}</b>" if d.get("tin") else ""))
-    if kq["canh_bao"]:
-        t += ["", KE, "⚠️ <b>Lưu ý</b>"]
-        for c in kq["canh_bao"]:
-            t.append("• " + c.split(". Nếu")[0] + " → nên chia nhỏ khối lượng")
+    for c in kq["canh_bao"]:
+        t.append("⚠️ " + c.split(". Nếu")[0].replace("Đang mua", "Mua").replace("Đang bán", "Bán") + " → chia nhỏ khối lượng")
     if DIA_CHI_WEB:
-        t += ["", f'<a href="{DIA_CHI_WEB}">Mở trang Bàn Ghép Cặp H4</a>']
+        t.append(f'<a href="{DIA_CHI_WEB}">Mở trang Bàn Ghép Cặp H4</a>')
     return "\n".join(t)[:4000]
 
 
@@ -703,8 +697,10 @@ def goi_telegram(phuong_thuc, du_lieu, tep=None):
     try:
         with urllib.request.urlopen(req, timeout=30) as r:
             print(f"Telegram {phuong_thuc}:", r.status)
+            return True
     except Exception as loi:
         print(f"Telegram {phuong_thuc} lỗi:", loi)
+        return False
 
 
 def gui_bao_cao(kq):
@@ -724,8 +720,11 @@ def gui_bao_cao(kq):
         anh.append((soan_chu_thich_anh(k, d), duong_dan))
     tom_tat = soan_tin_tom_tat(kq)
     for ma in DANH_SACH_CHAT:
-        goi_telegram("sendMessage", {"chat_id": ma, "text": tom_tat, "parse_mode": "HTML",
-                                     "disable_web_page_preview": "true"})
+        if not goi_telegram("sendMessage", {"chat_id": ma, "text": tom_tat, "parse_mode": "HTML",
+                                            "disable_web_page_preview": "true"}):
+            # Phòng khi Telegram không nhận khung thu gọn: gửi lại bản không có khung
+            goi_telegram("sendMessage", {"chat_id": ma, "parse_mode": "HTML", "disable_web_page_preview": "true",
+                                         "text": tom_tat.replace("<blockquote expandable>", "<i>").replace("</blockquote>", "</i>")})
         for chu_thich, duong_dan in anh:
             if duong_dan:
                 goi_telegram("sendPhoto", {"chat_id": ma, "caption": chu_thich, "parse_mode": "HTML"}, tep=duong_dan)
