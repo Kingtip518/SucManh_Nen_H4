@@ -553,9 +553,7 @@ def soan_tin_tom_tat(kq):
     for x in kq.get("theo_doi", []):
         dau = "🟢" if x["huong"] == "MUA" else "🔴"
         co = "✅ " + x["trang_thai"] if x["trang_thai"] != "Chưa có mô hình đảo chiều" else "chờ mô hình"
-        if not x.get("du_nguong", True):
-            co = "⛔ sức mạnh chưa đủ ngưỡng" + (f" (có {x['trang_thai']})" if x["trang_thai"] != "Chưa có mô hình đảo chiều" else "")
-        t.append(f"{dau} {x['huong']} {x['cap']} · {co}" + (f" ⚡ tin {x['tin']}" if x.get("tin") else ""))
+        t.append(f"{dau} {x['huong']} {x['cap']} · {co}" + (f" 🚨 <b>TIN {x['tin']}</b>" if x.get("tin") else ""))
 
     t += ["", KE]
     if not kq["dat"]:
@@ -565,7 +563,7 @@ def soan_tin_tom_tat(kq):
         for d in kq["dat"]:
             dau = "🟢" if d["huong"] == "MUA" else "🔴"
             t.append(f"{dau} <b>{d['huong']} {d['cap']}</b> · {d['mo_hinh']}" + (" ➕ <b>nhấn chìm 1 giờ</b>" if d.get("h1") else "")
-                     + (f" ⚡ tin {d['tin']}" if d.get("tin") else ""))
+                     + (f" 🚨 <b>TIN {d['tin']}</b>" if d.get("tin") else ""))
     if kq["canh_bao"]:
         t += ["", KE, "⚠️ <b>Lưu ý</b>"]
         for c in kq["canh_bao"]:

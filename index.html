@@ -112,8 +112,8 @@ tr:last-child td{border-bottom:none}
     <ol>
       <li>Tìm mô hình nến đảo chiều (nhấn chìm, búa, sao băng, sao mai, sao hôm, đáy nhíp, đỉnh nhíp, xuyên đâm, mây đen, quét đáy, quét đỉnh, phá giả nến mẹ, ba nến trong, ba lính trắng, ba quạ đen) trên <span id="cdGan">3</span> nến 4 giờ vừa đóng, nằm ở đỉnh hoặc đáy của <span id="cdDinh">12</span> nến gần nhất, và giá chưa phá qua đỉnh hoặc đáy của mô hình.</li>
       <li>Chỉ xét 5 cặp: đồng mạnh nhất ghép với 3 đồng yếu nhất, và đồng yếu nhất ghép với 3 đồng mạnh nhất. Luôn mua đồng mạnh, bán đồng yếu, và chỉ nhận mô hình nến cùng hướng. Sức mạnh tính giống bảng MarketMilk: % thay đổi từ giá mở cửa ngày của sàn (05:00 giờ Việt Nam vào mùa đông, 04:00 vào mùa hè). Trong 2 giờ đầu ngày, khi sức mạnh chưa hình thành, dùng sức mạnh của cả ngày vừa kết thúc.</li>
-      <li>Tin tác động cao: lấy từ lịch kinh tế Forex Factory, chỉ tin mức Cao trong ngày giao dịch hiện tại. Cặp nào có đồng tiền sắp ra tin được đánh dấu ⚡ để cân nhắc chờ tin xong mới vào lệnh.</li>
-      <li>Ngưỡng sức mạnh: đồng mạnh nhất phải từ +0,3% trở lên, đồng yếu nhất phải từ −0,3% trở xuống. Ba cặp ghép với đồng mạnh nhất chỉ được tính khi đồng mạnh nhất đủ ngưỡng; hai cặp ghép với đồng yếu nhất chỉ được tính khi đồng yếu nhất đủ ngưỡng. Cặp chưa đủ ngưỡng vẫn hiện trong bảng theo dõi nhưng không đưa vào lệnh đề xuất.</li>
+      <li>Tin tác động cao: lấy từ lịch kinh tế Forex Factory, chỉ tin mức Cao trong ngày giao dịch hiện tại. Cặp nào có đồng tiền sắp ra tin được đánh dấu 🚨 để cân nhắc chờ tin xong mới vào lệnh.</li>
+      <li>Ngưỡng sức mạnh: đồng mạnh nhất phải từ +0,3% trở lên, đồng yếu nhất phải từ −0,3% trở xuống. Ba cặp ghép với đồng mạnh nhất chỉ được tính khi đồng mạnh nhất đủ ngưỡng; hai cặp ghép với đồng yếu nhất chỉ được tính khi đồng yếu nhất đủ ngưỡng. Cặp chưa đủ ngưỡng (dòng ngưỡng có dấu ❌) vẫn hiện trong bảng theo dõi nhưng không đưa vào lệnh đề xuất.</li>
       <li>Cắt lỗ đặt ngoài đỉnh hoặc đáy mô hình. Mục tiêu là đỉnh hoặc đáy của <span id="cdMuc">20</span> nến 4 giờ gần nhất. Giá chờ là mức nên đợi giá hồi về để lời/lỗ đạt 1:1,5.</li>
     </ol>
     <p>Nến lấy theo giờ sàn MT5 phổ biến (0 giờ sàn = 5 giờ chiều New York), có thể lệch vài pip so với sàn của anh. Đây là công cụ tham khảo, không phải lời khuyên đầu tư.</p>
@@ -148,7 +148,7 @@ function veLenh(ds){
       <div><span>Lời/lỗ</span><span class="so">1:${so(d.loi_lo)}</span></div>
     </div>
     ${d.h1?`<div class="giaco">➕ Gia cố: ${d.h1}</div>`:''}
-    ${d.tin?`<div class="giaco" style="background:#fff4d6;color:#8a5a00">⚡ Sắp có tin tác động cao: ${d.tin}</div>`:''}
+    ${d.tin?`<div class="giaco" style="background:#fdecea;color:#d32f2f;font-weight:700">🚨 Sắp có tin tác động cao: ${d.tin}</div>`:''}
     ${d.gia_cho?`<div class="cho">Nên chờ giá hồi về <b class="so">${d.gia_cho}</b> để lời/lỗ đạt 1:1,5</div>`:''}
   </article>`).join('');
   document.querySelectorAll('canvas.bd').forEach(c=>veBieuDo(c,ds[+c.dataset.k]));
@@ -179,7 +179,7 @@ function veBieuDo(cv,d){
   g.strokeStyle=VIEN;g.strokeRect(0.5,0.5,W-PH,H-1);
 }
 function veLoai(ds){
-  $('loai').innerHTML=ds.length?ds.map(d=>`<tr><td><b>${d.cap}</b></td><td><span class="huong ${d.huong}">${d.huong}</span></td><td class="so">${so(d.chenh.toFixed(2))}</td><td>${d.du_nguong===false?'<span style="color:var(--phu)">⛔ Sức mạnh chưa đủ ngưỡng'+(d.trang_thai==='Chưa có mô hình đảo chiều'?'':' (có '+d.trang_thai+')')+'</span>':d.trang_thai==='Chưa có mô hình đảo chiều'?'<span style="color:var(--phu)">Chờ mô hình</span>':'<b>'+d.trang_thai+'</b>'}${d.tin?' <span style="color:#b07500">⚡ tin '+d.tin+'</span>':''}</td></tr>`).join('')
+  $('loai').innerHTML=ds.length?ds.map(d=>`<tr><td><b>${d.cap}</b></td><td><span class="huong ${d.huong}">${d.huong}</span></td><td class="so">${so(d.chenh.toFixed(2))}</td><td>${d.trang_thai==='Chưa có mô hình đảo chiều'?'<span style="color:var(--phu)">Chờ mô hình</span>':'<b>'+d.trang_thai+'</b>'}${d.tin?' <b style="color:#d32f2f">🚨 TIN '+d.tin+'</b>':''}</td></tr>`).join('')
     :'<tr><td colspan="4">Chưa có dữ liệu.</td></tr>';
 }
 async function tai(){
