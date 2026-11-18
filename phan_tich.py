@@ -530,8 +530,7 @@ def soan_tin_tom_tat(kq):
         dai = round(abs(x["phan_tram"]) / lon_nhat * 8)
         thanh = ("█" if x["phan_tram"] >= 0 else "░") * max(dai, 1)
         dong_sm.append(f"{x['tien']} {x['phan_tram']:+.2f}  {thanh}")
-    t = [f"📊 <b>NẾN 4 GIỜ ĐÓNG {kq['nen_4_gio_dong']}</b>",
-         f"Sức mạnh tiền tệ ({kq['cach_do']})",
+    t = [f"📊 <b>H4 {kq['nen_4_gio_dong']}</b> · SMTT {kq['cach_do']}",
          "<pre>" + "\n".join(dong_sm) + "</pre>"]
     ng = kq.get("nguong")
     if ng:
@@ -558,12 +557,10 @@ def soan_tin_tom_tat(kq):
             co = x["trang_thai"]
         else:
             co = "chờ mô hình"
-        t.append(f"{dau} {x['huong']} {x['cap']} · {co}" + (f" 🚨 <b>TIN {x['tin']}</b>" if x.get("tin") else ""))
+        t.append(f"{dau} {x['huong']} {x['cap']} · {co}" + (f" 🚨<i>{x['tin']}</i>" if x.get("tin") else ""))
 
     for c in kq["canh_bao"]:
         t.append("⚠️ " + c.split(". Nếu")[0].replace("Đang mua", "Mua").replace("Đang bán", "Bán") + " → chia nhỏ khối lượng")
-    if DIA_CHI_WEB:
-        t.append(f'<a href="{DIA_CHI_WEB}">Mở trang Bàn Ghép Cặp H4</a>')
     return "\n".join(t)[:4000]
 
 
