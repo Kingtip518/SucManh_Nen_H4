@@ -432,6 +432,91 @@ def phan_tich(lay_nen=lay_nen_gio, bay_gio=None):
     }
 
 
+# ---------------- Tin tác động cao trong ngày (lịch kinh tế Forex Factory) ----------------
+LICH_KINH_TE = "https://nfs.faireconomy.media/ff_calendar_thisweek.json"
+TEN_TIN_LICH = [
+    ("Core CPI", "Lạm phát lõi"), ("CPI", "Chỉ số giá tiêu dùng (lạm phát)"), ("Core PCE", "Lạm phát chi tiêu cá nhân lõi"),
+    ("PCE", "Lạm phát chi tiêu cá nhân"), ("PPI", "Chỉ số giá sản xuất"), ("Inflation", "Lạm phát"),
+    ("Non-Farm", "Bảng lương phi nông nghiệp"), ("Unemployment Claims", "Số đơn xin trợ cấp thất nghiệp"),
+    ("Unemployment Rate", "Tỷ lệ thất nghiệp"), ("Claimant Count", "Số người xin trợ cấp thất nghiệp"),
+    ("Employment Change", "Thay đổi số việc làm"), ("ADP", "Việc làm khu vực tư nhân"), ("Average Hourly Earnings", "Thu nhập bình quân theo giờ"),
+    ("Average Earnings", "Thu nhập bình quân"), ("Wage", "Tiền lương"), ("JOLTS", "Số việc làm cần tuyển"),
+    ("GDP", "Tăng trưởng kinh tế (GDP)"), ("Retail Sales", "Doanh số bán lẻ"),
+    ("ISM Manufacturing", "Chỉ số sản xuất ISM"), ("ISM Services", "Chỉ số dịch vụ ISM"),
+    ("Manufacturing PMI", "Chỉ số quản lý mua hàng ngành sản xuất"), ("Services PMI", "Chỉ số quản lý mua hàng ngành dịch vụ"),
+    ("PMI", "Chỉ số quản lý mua hàng"),
+    ("Monetary Policy Statement", "Tuyên bố chính sách tiền tệ"), ("Monetary Policy Report", "Báo cáo chính sách tiền tệ"),
+    ("Rate Statement", "Tuyên bố lãi suất"), ("Federal Funds Rate", "Quyết định lãi suất của Fed"),
+    ("Interest Rate", "Quyết định lãi suất"), ("Cash Rate", "Quyết định lãi suất"), ("Official Bank Rate", "Quyết định lãi suất"),
+    ("Overnight Rate", "Quyết định lãi suất"), ("Policy Rate", "Quyết định lãi suất"), ("Main Refinancing Rate", "Quyết định lãi suất"),
+    ("Minutes", "Biên bản cuộc họp lãi suất"), ("Press Conference", "Họp báo"), ("Trade Balance", "Cán cân thương mại"),
+    ("Consumer Confidence", "Niềm tin người tiêu dùng"), ("Consumer Sentiment", "Tâm lý người tiêu dùng"),
+    ("Industrial Production", "Sản xuất công nghiệp"), ("Building Permits", "Giấy phép xây dựng"),
+    ("Crude Oil Inventories", "Tồn kho dầu thô Mỹ"), ("Budget", "Ngân sách"), ("Election", "Bầu cử"),
+    ("Tankan", "Khảo sát doanh nghiệp Tankan"), ("ZEW", "Chỉ số kỳ vọng kinh tế ZEW"), ("Ifo", "Chỉ số kinh doanh Ifo"),
+]
+NGUOI_PHAT_BIEU = [
+    ("Fed Chair", "Chủ tịch Fed"), ("FOMC Member", "Thành viên Fed"), ("ECB President", "Chủ tịch Ngân hàng Trung ương châu Âu"),
+    ("BOE Gov", "Thống đốc Ngân hàng Anh"), ("BOJ Gov", "Thống đốc Ngân hàng Nhật"), ("RBA Gov", "Thống đốc Ngân hàng Úc"),
+    ("RBNZ Gov", "Thống đốc Ngân hàng New Zealand"), ("BOC Gov", "Thống đốc Ngân hàng Canada"),
+    ("SNB Chairman", "Chủ tịch Ngân hàng Thụy Sĩ"), ("Treasury Secretary", "Bộ trưởng Tài chính Mỹ"), ("President", "Tổng thống"),
+]
+
+
+def ten_tin_viet(ten):
+    """Đổi tên tin tiếng Anh trong lịch kinh tế sang tiếng Việt; không có trong danh sách thì giữ tên gốc."""
+    if ten.endswith(" Speaks"):
+        nguoi = ten[:-7]
+        for goc, viet in NGUOI_PHAT_BIEU:
+            if nguoi.startswith(goc):
+                return f"{viet} {nguoi[len(goc):].strip()} phát biểu".replace("  ", " ")
+        return f"{nguoi} phát biểu"
+    for goc, viet in TEN_TIN_LICH:
+        if goc.lower() in ten.lower():
+            them = " (so với cùng kỳ năm trước)" if "y/y" in ten else " (so với tháng trước)" if "m/m" in ten else \
+                   " (so với quý trước)" if "q/q" in ten else ""
+            return viet + them
+    return ten
+
+
+def lay_tin_tac_dong_cao(bay_gio):
+    """Tin mức tác động Cao của 8 đồng tiền trong ngày giao dịch hiện tại. Lỗi mạng thì trả về None."""
+    try:
+        req = urllib.request.Request(LICH_KINH_TE, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=20) as r:
+            ds = json.load(r)
+    except Exception as loi:
+        print("Lấy lịch kinh tế lỗi:", loi)
+        return None
+    dau = dau_ngay_san(bay_gio)
+    kq = []
+    for t in ds:
+        if t.get("impact") != "High" or t.get("country") not in TIEN:
+            continue
+        try:
+            ts = int(datetime.fromisoformat(t["date"]).timestamp())
+        except Exception:
+            continue
+        if not (dau <= ts < dau + 86400):
+            continue
+        kq.append({"ts": ts, "gio": datetime.fromtimestamp(ts, GIO_VN).strftime("%H:%M"), "tien": t["country"],
+                   "ten": ten_tin_viet(t["title"]), "du_bao": t.get("forecast", ""), "ky_truoc": t.get("previous", ""),
+                   "da_ra": ts <= bay_gio})
+    kq.sort(key=lambda x: x["ts"])
+    return kq
+
+
+def gan_tin_vao_cap(kq, tin):
+    """Ghi chú vào từng cặp theo dõi / lệnh: đồng nào trong cặp sắp có tin tác động cao hôm nay."""
+    sap_ra = [x for x in tin if not x["da_ra"]]
+    for ds in (kq["theo_doi"], kq["dat"]):
+        for d in ds:
+            hai = d["cap"].split("/")
+            co = [x for x in sap_ra if x["tien"] in hai]
+            if co:
+                d["tin"] = ", ".join(dict.fromkeys(f"{x['tien']} {x['gio']}" for x in co))
+
+
 def so(gia, so_le):
     return f"{gia:.{so_le}f}"
 
@@ -454,13 +539,23 @@ def soan_tin_tom_tat(kq):
         t.append(f"Ngưỡng sức mạnh: {ng['tien_manh']} cần ≥ {ng['manh']:+.2f} {'✅' if ng['manh_dat'] else '❌'} · "
                  f"{ng['tien_yeu']} cần ≤ {ng['yeu']:+.2f} {'✅' if ng['yeu_dat'] else '❌'}")
 
+    tin = kq.get("tin_cao")
+    if tin is not None:
+        t += ["", KE, "📅 <b>TIN TÁC ĐỘNG CAO HÔM NAY</b>", ""]
+        if not tin:
+            t.append("Không có tin tác động cao")
+        for x in tin:
+            so_lieu = " · ".join(p for p in (f"dự báo {x['du_bao']}" if x["du_bao"] else "",
+                                             f"kỳ trước {x['ky_truoc']}" if x["ky_truoc"] else "") if p)
+            t.append(f"{'✔️' if x['da_ra'] else '⏰'} {x['gio']} <b>{x['tien']}</b> · {x['ten']}"
+                     + (f" ({so_lieu})" if so_lieu else "") + (" · đã ra" if x["da_ra"] else ""))
     t += ["", KE, "👀 <b>5 CẶP MẠNH – YẾU ĐANG THEO DÕI</b>", ""]
     for x in kq.get("theo_doi", []):
         dau = "🟢" if x["huong"] == "MUA" else "🔴"
         co = "✅ " + x["trang_thai"] if x["trang_thai"] != "Chưa có mô hình đảo chiều" else "chờ mô hình"
         if not x.get("du_nguong", True):
             co = "⛔ sức mạnh chưa đủ ngưỡng" + (f" (có {x['trang_thai']})" if x["trang_thai"] != "Chưa có mô hình đảo chiều" else "")
-        t.append(f"{dau} {x['huong']} {x['cap']} · {co}")
+        t.append(f"{dau} {x['huong']} {x['cap']} · {co}" + (f" ⚡ tin {x['tin']}" if x.get("tin") else ""))
 
     t += ["", KE]
     if not kq["dat"]:
@@ -469,7 +564,8 @@ def soan_tin_tom_tat(kq):
         t += [f"🎯 <b>{len(kq['dat'])} LỆNH ĐỀ XUẤT</b> (ảnh chi tiết ở tin sau)", ""]
         for d in kq["dat"]:
             dau = "🟢" if d["huong"] == "MUA" else "🔴"
-            t.append(f"{dau} <b>{d['huong']} {d['cap']}</b> · {d['mo_hinh']}" + (" ➕ <b>nhấn chìm 1 giờ</b>" if d.get("h1") else ""))
+            t.append(f"{dau} <b>{d['huong']} {d['cap']}</b> · {d['mo_hinh']}" + (" ➕ <b>nhấn chìm 1 giờ</b>" if d.get("h1") else "")
+                     + (f" ⚡ tin {d['tin']}" if d.get("tin") else ""))
     if kq["canh_bao"]:
         t += ["", KE, "⚠️ <b>Lưu ý</b>"]
         for c in kq["canh_bao"]:
@@ -651,6 +747,10 @@ def main():
     if kq["so_cap_doc_duoc"] < 20:
         print("Đọc được quá ít cặp, giữ nguyên dữ liệu cũ.")
         return
+    tin = lay_tin_tac_dong_cao(int(time.time()))
+    if tin is not None:
+        gan_tin_vao_cap(kq, tin)
+        kq["tin_cao"] = [{k: v for k, v in x.items() if k != "ts"} for x in tin]
     with open(FILE_DATA, "w", encoding="utf-8") as f:
         json.dump(kq, f, ensure_ascii=False, indent=1)
     co_nen_moi = kq["ma_nen"] != cu.get("ma_nen")
