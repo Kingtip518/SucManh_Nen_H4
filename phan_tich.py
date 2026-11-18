@@ -557,7 +557,7 @@ def soan_tin_tom_tat(kq):
             co = x["trang_thai"]
         else:
             co = "chờ mô hình"
-        t.append(f"{dau} {x['huong']} {x['cap']} · {co}" + (f" 🚨<i>{x['tin']}</i>" if x.get("tin") else ""))
+        t.append(f"{dau} {x['huong']} {x['cap']} · {co}" + (f" ⏰<b>TIN {x['tin']}</b>" if x.get("tin") else ""))
 
     for c in kq["canh_bao"]:
         t.append("⚠️ " + c.split(". Nếu")[0].replace("Đang mua", "Mua").replace("Đang bán", "Bán") + " → chia nhỏ khối lượng")
