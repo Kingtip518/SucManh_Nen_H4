@@ -1,7 +1,7 @@
 {
- "cap_nhat": "08:05 19/11/2026",
- "nen_4_gio_dong": "05:00 19/11",
- "ma_nen": 1795039200,
+ "cap_nhat": "09:05 19/11/2026",
+ "nen_4_gio_dong": "09:00 19/11",
+ "ma_nen": 1795053600,
  "so_cap_doc_duoc": 28,
  "cach_do": "từ giá mở cửa ngày",
  "nguong": {
@@ -9,41 +9,41 @@
   "yeu": -0.3,
   "manh_dat": false,
   "yeu_dat": true,
-  "tien_manh": "NZD",
+  "tien_manh": "USD",
   "tien_yeu": "AUD"
  },
  "suc_manh": [
   {
-   "tien": "NZD",
-   "phan_tram": 0.23
-  },
-  {
-   "tien": "CHF",
-   "phan_tram": 0.1
+   "tien": "USD",
+   "phan_tram": 0.13
   },
   {
    "tien": "EUR",
-   "phan_tram": 0.06
+   "phan_tram": 0.09
+  },
+  {
+   "tien": "CHF",
+   "phan_tram": 0.08
   },
   {
    "tien": "GBP",
-   "phan_tram": 0.04
+   "phan_tram": 0.08
   },
   {
-   "tien": "USD",
-   "phan_tram": 0.0
-  },
-  {
-   "tien": "CAD",
-   "phan_tram": -0.02
+   "tien": "NZD",
+   "phan_tram": 0.08
   },
   {
    "tien": "JPY",
-   "phan_tram": -0.04
+   "phan_tram": 0.05
+  },
+  {
+   "tien": "CAD",
+   "phan_tram": 0.01
   },
   {
    "tien": "AUD",
-   "phan_tram": -0.37
+   "phan_tram": -0.52
   }
  ],
  "dat": [
@@ -54,19 +54,13 @@
    "huong": "MUA",
    "mo_hinh": "nhấn chìm tăng + sao mai",
    "gio_nen": "01:00 19/11",
-   "chenh": 0.43,
-   "gia": 1.64058,
+   "chenh": 0.62,
+   "gia": 1.64301,
    "cat_lo": 1.62775,
-   "muc_tieu": 1.66624,
-   "loi_lo": 2.0,
+   "muc_tieu": 1.64346,
+   "loi_lo": 0.0,
+   "gia_cho": 1.63403,
    "nen": [
-    [
-     1794261600,
-     1.62032,
-     1.62186,
-     1.61874,
-     1.61996
-    ],
     [
      1794276000,
      1.61942,
@@ -364,19 +358,26 @@
     [
      1795039200,
      1.63336,
-     1.63498,
+     1.635,
      1.63259,
-     1.63436
+     1.63315
     ],
     [
      1795053600,
-     1.63443,
-     1.6417,
-     1.63159,
-     1.64058
+     1.63355,
+     1.64346,
+     1.63154,
+     1.642
+    ],
+    [
+     1795068000,
+     1.642,
+     1.6431,
+     1.64177,
+     1.64301
     ]
    ],
-   "chi_so_mh": 42,
+   "chi_so_mh": 41,
    "so_le": 5,
    "so_nen_mh": 3,
    "h1": "Nhấn chìm tăng khung 1 giờ (nến đóng 22:00 18/11)"
@@ -385,37 +386,37 @@
  "loai": [],
  "theo_doi": [
   {
-   "cap": "AUD/NZD",
+   "cap": "AUD/USD",
    "huong": "BÁN",
-   "chenh": 0.6,
-   "du_nguong": true,
-   "trang_thai": "Chưa có mô hình đảo chiều"
-  },
-  {
-   "cap": "AUD/CHF",
-   "huong": "BÁN",
-   "chenh": 0.46,
+   "chenh": 0.65,
    "du_nguong": true,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
    "cap": "EUR/AUD",
    "huong": "MUA",
-   "chenh": 0.43,
+   "chenh": 0.62,
    "du_nguong": true,
    "trang_thai": "nhấn chìm tăng + sao mai"
   },
   {
-   "cap": "NZD/JPY",
+   "cap": "AUD/CHF",
+   "huong": "BÁN",
+   "chenh": 0.61,
+   "du_nguong": true,
+   "trang_thai": "Chưa có mô hình đảo chiều"
+  },
+  {
+   "cap": "USD/CAD",
    "huong": "MUA",
-   "chenh": 0.26,
+   "chenh": 0.12,
    "du_nguong": false,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
-   "cap": "NZD/CAD",
+   "cap": "USD/JPY",
    "huong": "MUA",
-   "chenh": 0.25,
+   "chenh": 0.07,
    "du_nguong": false,
    "trang_thai": "Chưa có mô hình đảo chiều"
   }
