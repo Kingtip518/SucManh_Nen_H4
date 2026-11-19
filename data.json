@@ -1,5 +1,5 @@
 {
- "cap_nhat": "17:05 19/11/2026",
+ "cap_nhat": "20:05 19/11/2026",
  "nen_4_gio_dong": "17:00 19/11",
  "ma_nen": 1795082400,
  "so_cap_doc_duoc": 28,
@@ -15,23 +15,23 @@
  "suc_manh": [
   {
    "tien": "NZD",
-   "phan_tram": 0.6
+   "phan_tram": 0.61
   },
   {
    "tien": "EUR",
-   "phan_tram": 0.16
+   "phan_tram": 0.15
   },
   {
    "tien": "CAD",
-   "phan_tram": 0.06
+   "phan_tram": 0.09
   },
   {
    "tien": "GBP",
-   "phan_tram": -0.02
+   "phan_tram": -0.0
   },
   {
    "tien": "CHF",
-   "phan_tram": -0.03
+   "phan_tram": -0.06
   },
   {
    "tien": "USD",
@@ -39,11 +39,11 @@
   },
   {
    "tien": "AUD",
-   "phan_tram": -0.17
+   "phan_tram": -0.15
   },
   {
    "tien": "JPY",
-   "phan_tram": -0.52
+   "phan_tram": -0.56
   }
  ],
  "dat": [
@@ -54,12 +54,11 @@
    "huong": "MUA",
    "mo_hinh": "nhấn chìm tăng + búa + quét đáy + phá giả nến mẹ",
    "gio_nen": "09:00 19/11",
-   "chenh": 1.12,
-   "gia": 88.349,
+   "chenh": 1.17,
+   "gia": 88.383,
    "cat_lo": 87.095,
-   "muc_tieu": 88.352,
-   "loi_lo": 0.0,
-   "gia_cho": 87.598,
+   "muc_tieu": 90.959,
+   "loi_lo": 2.0,
    "nen": [
     [
      1794304800,
@@ -372,9 +371,9 @@
     [
      1795096800,
      88.285,
-     88.372,
+     88.478,
      88.281,
-     88.349
+     88.383
     ]
    ],
    "chi_so_mh": 41,
@@ -388,11 +387,11 @@
    "huong": "MUA",
    "mo_hinh": "sao mai",
    "gio_nen": "13:00 19/11",
-   "chenh": 0.58,
-   "gia": 111.783,
+   "chenh": 0.65,
+   "gia": 111.845,
    "cat_lo": 111.001,
    "muc_tieu": 111.923,
-   "loi_lo": 0.2,
+   "loi_lo": 0.1,
    "gia_cho": 111.37,
    "nen": [
     [
@@ -586,7 +585,7 @@
     ],
     [
      1794852000,
-     111.644,
+     111.645,
      111.666,
      111.462,
      111.562
@@ -621,7 +620,7 @@
     ],
     [
      1794924000,
-     111.222,
+     111.224,
      111.53,
      111.185,
      111.471
@@ -673,7 +672,7 @@
      111.378,
      111.392,
      111.025,
-     111.108
+     111.109
     ],
     [
      1795039200,
@@ -706,9 +705,9 @@
     [
      1795096800,
      111.749,
-     111.791,
-     111.712,
-     111.783
+     111.889,
+     111.669,
+     111.845
     ]
    ],
    "chi_so_mh": 42,
@@ -721,35 +720,35 @@
   {
    "cap": "NZD/JPY",
    "huong": "MUA",
-   "chenh": 1.12,
+   "chenh": 1.17,
    "du_nguong": true,
    "trang_thai": "nhấn chìm tăng + búa + quét đáy + phá giả nến mẹ"
   },
   {
    "cap": "AUD/NZD",
    "huong": "BÁN",
-   "chenh": 0.77,
+   "chenh": 0.76,
    "du_nguong": true,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
    "cap": "EUR/JPY",
    "huong": "MUA",
-   "chenh": 0.69,
+   "chenh": 0.71,
    "du_nguong": true,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
    "cap": "NZD/USD",
    "huong": "MUA",
-   "chenh": 0.68,
+   "chenh": 0.69,
    "du_nguong": true,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
    "cap": "CAD/JPY",
    "huong": "MUA",
-   "chenh": 0.58,
+   "chenh": 0.65,
    "du_nguong": true,
    "trang_thai": "sao mai"
   }
