@@ -1,86 +1,86 @@
 {
- "cap_nhat": "04:05 20/11/2026",
- "nen_4_gio_dong": "01:00 20/11",
- "ma_nen": 1795111200,
+ "cap_nhat": "05:05 20/11/2026",
+ "nen_4_gio_dong": "05:00 20/11",
+ "ma_nen": 1795125600,
  "so_cap_doc_duoc": 28,
- "cach_do": "từ giá mở cửa ngày",
+ "cach_do": "cả ngày hôm trước",
  "nguong": {
   "manh": 0.3,
   "yeu": -0.3,
   "manh_dat": false,
   "yeu_dat": true,
-  "tien_manh": "EUR",
+  "tien_manh": "USD",
   "tien_yeu": "AUD"
  },
  "suc_manh": [
   {
-   "tien": "EUR",
-   "phan_tram": 0.29
-  },
-  {
    "tien": "USD",
-   "phan_tram": 0.27
+   "phan_tram": 0.28
   },
   {
-   "tien": "CHF",
-   "phan_tram": 0.13
-  },
-  {
-   "tien": "NZD",
-   "phan_tram": 0.06
+   "tien": "EUR",
+   "phan_tram": 0.22
   },
   {
    "tien": "CAD",
-   "phan_tram": 0.06
+   "phan_tram": 0.15
+  },
+  {
+   "tien": "CHF",
+   "phan_tram": 0.14
+  },
+  {
+   "tien": "NZD",
+   "phan_tram": 0.09
   },
   {
    "tien": "JPY",
-   "phan_tram": -0.01
+   "phan_tram": 0.0
   },
   {
    "tien": "GBP",
-   "phan_tram": -0.15
+   "phan_tram": -0.22
   },
   {
    "tien": "AUD",
-   "phan_tram": -0.64
+   "phan_tram": -0.67
   }
  ],
  "dat": [],
  "loai": [],
  "theo_doi": [
   {
-   "cap": "EUR/AUD",
-   "huong": "MUA",
+   "cap": "AUD/USD",
+   "huong": "BÁN",
    "chenh": 0.94,
    "du_nguong": true,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
-   "cap": "AUD/USD",
-   "huong": "BÁN",
-   "chenh": 0.91,
-   "du_nguong": true,
-   "trang_thai": "Chưa có mô hình đảo chiều"
-  },
-  {
-   "cap": "AUD/CHF",
-   "huong": "BÁN",
-   "chenh": 0.77,
-   "du_nguong": true,
-   "trang_thai": "Chưa có mô hình đảo chiều"
-  },
-  {
-   "cap": "EUR/GBP",
+   "cap": "EUR/AUD",
    "huong": "MUA",
-   "chenh": 0.45,
+   "chenh": 0.89,
+   "du_nguong": true,
+   "trang_thai": "Chưa có mô hình đảo chiều"
+  },
+  {
+   "cap": "AUD/CAD",
+   "huong": "BÁN",
+   "chenh": 0.81,
+   "du_nguong": true,
+   "trang_thai": "Chưa có mô hình đảo chiều"
+  },
+  {
+   "cap": "GBP/USD",
+   "huong": "BÁN",
+   "chenh": 0.49,
    "du_nguong": false,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
-   "cap": "EUR/JPY",
+   "cap": "USD/JPY",
    "huong": "MUA",
-   "chenh": 0.3,
+   "chenh": 0.27,
    "du_nguong": false,
    "trang_thai": "Chưa có mô hình đảo chiều"
   }
@@ -91,22 +91,5 @@
   "so_nen_gan_nhat": 3,
   "so_nen_muc_tieu": 20
  },
- "tin_cao": [
-  {
-   "gio": "07:30",
-   "tien": "AUD",
-   "ten": "Thay đổi số việc làm",
-   "du_bao": "25.5K",
-   "ky_truoc": "-39.3K",
-   "da_ra": true
-  },
-  {
-   "gio": "07:30",
-   "tien": "AUD",
-   "ten": "Tỷ lệ thất nghiệp",
-   "du_bao": "4.7%",
-   "ky_truoc": "4.7%",
-   "da_ra": true
-  }
- ]
+ "tin_cao": []
 }
