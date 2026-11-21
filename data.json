@@ -1,9 +1,9 @@
 {
- "cap_nhat": "04:05 22/11/2026",
+ "cap_nhat": "05:05 22/11/2026",
  "nen_4_gio_dong": "09:00 21/11",
  "ma_nen": 1795226400,
  "so_cap_doc_duoc": 28,
- "cach_do": "từ giá mở cửa ngày",
+ "cach_do": "cả ngày hôm trước",
  "nguong": {
   "manh": 0.3,
   "yeu": -0.3,
