@@ -1,86 +1,86 @@
 {
- "cap_nhat": "05:05 23/11/2026",
+ "cap_nhat": "08:05 23/11/2026",
  "nen_4_gio_dong": "09:00 21/11",
  "ma_nen": 1795226400,
  "so_cap_doc_duoc": 28,
- "cach_do": "cả ngày hôm trước",
+ "cach_do": "từ giá mở cửa ngày",
  "nguong": {
   "manh": 0.3,
   "yeu": -0.3,
   "manh_dat": false,
   "yeu_dat": false,
-  "tien_manh": "CHF",
-  "tien_yeu": "JPY"
+  "tien_manh": "AUD",
+  "tien_yeu": "USD"
  },
  "suc_manh": [
+  {
+   "tien": "AUD",
+   "phan_tram": 0.05
+  },
+  {
+   "tien": "GBP",
+   "phan_tram": 0.04
+  },
+  {
+   "tien": "NZD",
+   "phan_tram": 0.01
+  },
+  {
+   "tien": "EUR",
+   "phan_tram": 0.0
+  },
   {
    "tien": "CHF",
    "phan_tram": 0.0
   },
   {
-   "tien": "NZD",
-   "phan_tram": 0.0
-  },
-  {
    "tien": "CAD",
-   "phan_tram": 0.0
-  },
-  {
-   "tien": "AUD",
-   "phan_tram": -0.0
-  },
-  {
-   "tien": "GBP",
-   "phan_tram": -0.0
-  },
-  {
-   "tien": "USD",
-   "phan_tram": -0.0
-  },
-  {
-   "tien": "EUR",
-   "phan_tram": -0.0
+   "phan_tram": -0.01
   },
   {
    "tien": "JPY",
-   "phan_tram": -0.01
+   "phan_tram": -0.02
+  },
+  {
+   "tien": "USD",
+   "phan_tram": -0.07
   }
  ],
  "dat": [],
  "loai": [],
  "theo_doi": [
   {
-   "cap": "EUR/CHF",
-   "huong": "BÁN",
-   "chenh": 0.01,
-   "du_nguong": false,
-   "trang_thai": "Chưa có mô hình đảo chiều"
-  },
-  {
-   "cap": "NZD/JPY",
+   "cap": "AUD/USD",
    "huong": "MUA",
-   "chenh": 0.01,
+   "chenh": 0.12,
    "du_nguong": false,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
-   "cap": "USD/CHF",
-   "huong": "BÁN",
-   "chenh": 0.01,
-   "du_nguong": false,
-   "trang_thai": "Chưa có mô hình đảo chiều"
-  },
-  {
-   "cap": "CAD/JPY",
+   "cap": "GBP/USD",
    "huong": "MUA",
-   "chenh": 0.01,
+   "chenh": 0.11,
    "du_nguong": false,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
-   "cap": "CHF/JPY",
+   "cap": "NZD/USD",
    "huong": "MUA",
-   "chenh": 0.01,
+   "chenh": 0.08,
+   "du_nguong": false,
+   "trang_thai": "Chưa có mô hình đảo chiều"
+  },
+  {
+   "cap": "AUD/JPY",
+   "huong": "MUA",
+   "chenh": 0.07,
+   "du_nguong": false,
+   "trang_thai": "Chưa có mô hình đảo chiều"
+  },
+  {
+   "cap": "AUD/CAD",
+   "huong": "MUA",
+   "chenh": 0.05,
    "du_nguong": false,
    "trang_thai": "Chưa có mô hình đảo chiều"
   }
