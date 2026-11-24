@@ -1,9 +1,9 @@
 {
- "cap_nhat": "04:05 25/11/2026",
- "nen_4_gio_dong": "01:00 25/11",
- "ma_nen": 1795543200,
+ "cap_nhat": "05:05 25/11/2026",
+ "nen_4_gio_dong": "05:00 25/11",
+ "ma_nen": 1795557600,
  "so_cap_doc_duoc": 28,
- "cach_do": "từ giá mở cửa ngày",
+ "cach_do": "cả ngày hôm trước",
  "nguong": {
   "manh": 0.3,
   "yeu": -0.3,
@@ -15,15 +15,15 @@
  "suc_manh": [
   {
    "tien": "CHF",
-   "phan_tram": 0.33
-  },
-  {
-   "tien": "GBP",
-   "phan_tram": 0.27
+   "phan_tram": 0.34
   },
   {
    "tien": "CAD",
-   "phan_tram": 0.26
+   "phan_tram": 0.28
+  },
+  {
+   "tien": "GBP",
+   "phan_tram": 0.28
   },
   {
    "tien": "NZD",
@@ -31,15 +31,15 @@
   },
   {
    "tien": "EUR",
-   "phan_tram": 0.23
+   "phan_tram": 0.22
   },
   {
    "tien": "AUD",
-   "phan_tram": -0.23
+   "phan_tram": -0.24
   },
   {
    "tien": "USD",
-   "phan_tram": -0.45
+   "phan_tram": -0.46
   },
   {
    "tien": "JPY",
@@ -57,6 +57,13 @@
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
+   "cap": "CAD/JPY",
+   "huong": "MUA",
+   "chenh": 0.95,
+   "du_nguong": true,
+   "trang_thai": "Chưa có mô hình đảo chiều"
+  },
+  {
    "cap": "GBP/JPY",
    "huong": "MUA",
    "chenh": 0.94,
@@ -64,25 +71,20 @@
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
-   "cap": "CAD/JPY",
-   "huong": "MUA",
-   "chenh": 0.92,
-   "du_nguong": true,
-   "trang_thai": "Chưa có mô hình đảo chiều"
-  },
-  {
    "cap": "USD/CHF",
    "huong": "BÁN",
-   "chenh": 0.78,
+   "chenh": 0.79,
    "du_nguong": true,
-   "trang_thai": "Chưa có mô hình đảo chiều"
+   "trang_thai": "Chưa có mô hình đảo chiều",
+   "tin": "USD 20:30"
   },
   {
    "cap": "AUD/CHF",
    "huong": "BÁN",
-   "chenh": 0.56,
+   "chenh": 0.58,
    "du_nguong": true,
-   "trang_thai": "Chưa có mô hình đảo chiều"
+   "trang_thai": "Chưa có mô hình đảo chiều",
+   "tin": "AUD 07:30"
   }
  ],
  "canh_bao": [],
@@ -91,5 +93,46 @@
   "so_nen_gan_nhat": 3,
   "so_nen_muc_tieu": 20
  },
- "tin_cao": []
+ "tin_cao": [
+  {
+   "gio": "07:30",
+   "tien": "AUD",
+   "ten": "Chỉ số giá tiêu dùng (lạm phát) (so với tháng trước)",
+   "du_bao": "0.4%",
+   "ky_truoc": "0.8%",
+   "da_ra": false
+  },
+  {
+   "gio": "07:30",
+   "tien": "AUD",
+   "ten": "Chỉ số giá tiêu dùng (lạm phát) (so với cùng kỳ năm trước)",
+   "du_bao": "4.7%",
+   "ky_truoc": "4.3%",
+   "da_ra": false
+  },
+  {
+   "gio": "07:30",
+   "tien": "AUD",
+   "ten": "Chỉ số giá tiêu dùng (lạm phát) (so với tháng trước)",
+   "du_bao": "0.3%",
+   "ky_truoc": "0.3%",
+   "da_ra": false
+  },
+  {
+   "gio": "20:30",
+   "tien": "USD",
+   "ten": "Lạm phát chi tiêu cá nhân lõi (so với tháng trước)",
+   "du_bao": "0.3%",
+   "ky_truoc": "0.3%",
+   "da_ra": false
+  },
+  {
+   "gio": "20:30",
+   "tien": "USD",
+   "ten": "Tăng trưởng kinh tế (GDP) (so với quý trước)",
+   "du_bao": "3.5%",
+   "ky_truoc": "3.4%",
+   "da_ra": false
+  }
+ ]
 }
