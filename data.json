@@ -1,5 +1,5 @@
 {
- "cap_nhat": "01:05 25/11/2026",
+ "cap_nhat": "04:05 25/11/2026",
  "nen_4_gio_dong": "01:00 25/11",
  "ma_nen": 1795543200,
  "so_cap_doc_duoc": 28,
@@ -9,78 +9,78 @@
   "yeu": -0.3,
   "manh_dat": true,
   "yeu_dat": true,
-  "tien_manh": "NZD",
+  "tien_manh": "CHF",
   "tien_yeu": "JPY"
  },
  "suc_manh": [
   {
-   "tien": "NZD",
+   "tien": "CHF",
    "phan_tram": 0.33
   },
   {
-   "tien": "CHF",
-   "phan_tram": 0.32
-  },
-  {
    "tien": "GBP",
-   "phan_tram": 0.29
-  },
-  {
-   "tien": "EUR",
    "phan_tram": 0.27
   },
   {
    "tien": "CAD",
-   "phan_tram": 0.21
+   "phan_tram": 0.26
+  },
+  {
+   "tien": "NZD",
+   "phan_tram": 0.25
+  },
+  {
+   "tien": "EUR",
+   "phan_tram": 0.23
   },
   {
    "tien": "AUD",
-   "phan_tram": -0.21
+   "phan_tram": -0.23
   },
   {
    "tien": "USD",
-   "phan_tram": -0.51
+   "phan_tram": -0.45
   },
   {
    "tien": "JPY",
-   "phan_tram": -0.71
+   "phan_tram": -0.67
   }
  ],
  "dat": [],
  "loai": [],
  "theo_doi": [
   {
-   "cap": "NZD/JPY",
-   "huong": "MUA",
-   "chenh": 1.04,
-   "du_nguong": true,
-   "trang_thai": "Chưa có mô hình đảo chiều"
-  },
-  {
    "cap": "CHF/JPY",
-   "huong": "MUA",
-   "chenh": 1.03,
-   "du_nguong": true,
-   "trang_thai": "Chưa có mô hình đảo chiều"
-  },
-  {
-   "cap": "GBP/JPY",
    "huong": "MUA",
    "chenh": 1.0,
    "du_nguong": true,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
-   "cap": "NZD/USD",
+   "cap": "GBP/JPY",
    "huong": "MUA",
-   "chenh": 0.84,
+   "chenh": 0.94,
    "du_nguong": true,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
-   "cap": "AUD/NZD",
+   "cap": "CAD/JPY",
+   "huong": "MUA",
+   "chenh": 0.92,
+   "du_nguong": true,
+   "trang_thai": "Chưa có mô hình đảo chiều"
+  },
+  {
+   "cap": "USD/CHF",
    "huong": "BÁN",
-   "chenh": 0.54,
+   "chenh": 0.78,
+   "du_nguong": true,
+   "trang_thai": "Chưa có mô hình đảo chiều"
+  },
+  {
+   "cap": "AUD/CHF",
+   "huong": "BÁN",
+   "chenh": 0.56,
    "du_nguong": true,
    "trang_thai": "Chưa có mô hình đảo chiều"
   }
