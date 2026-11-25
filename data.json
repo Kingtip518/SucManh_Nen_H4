@@ -1,90 +1,88 @@
 {
- "cap_nhat": "05:05 25/11/2026",
+ "cap_nhat": "08:05 25/11/2026",
  "nen_4_gio_dong": "05:00 25/11",
  "ma_nen": 1795557600,
  "so_cap_doc_duoc": 28,
- "cach_do": "cả ngày hôm trước",
+ "cach_do": "từ giá mở cửa ngày",
  "nguong": {
   "manh": 0.3,
   "yeu": -0.3,
-  "manh_dat": true,
-  "yeu_dat": true,
-  "tien_manh": "CHF",
-  "tien_yeu": "JPY"
+  "manh_dat": false,
+  "yeu_dat": false,
+  "tien_manh": "AUD",
+  "tien_yeu": "NZD"
  },
  "suc_manh": [
   {
-   "tien": "CHF",
-   "phan_tram": 0.34
-  },
-  {
-   "tien": "CAD",
-   "phan_tram": 0.28
-  },
-  {
-   "tien": "GBP",
-   "phan_tram": 0.28
-  },
-  {
-   "tien": "NZD",
-   "phan_tram": 0.25
-  },
-  {
-   "tien": "EUR",
+   "tien": "AUD",
    "phan_tram": 0.22
   },
   {
-   "tien": "AUD",
-   "phan_tram": -0.24
+   "tien": "JPY",
+   "phan_tram": -0.0
+  },
+  {
+   "tien": "CAD",
+   "phan_tram": -0.0
+  },
+  {
+   "tien": "GBP",
+   "phan_tram": -0.01
   },
   {
    "tien": "USD",
-   "phan_tram": -0.46
+   "phan_tram": -0.02
   },
   {
-   "tien": "JPY",
-   "phan_tram": -0.67
+   "tien": "EUR",
+   "phan_tram": -0.04
+  },
+  {
+   "tien": "CHF",
+   "phan_tram": -0.05
+  },
+  {
+   "tien": "NZD",
+   "phan_tram": -0.1
   }
  ],
  "dat": [],
  "loai": [],
  "theo_doi": [
   {
-   "cap": "CHF/JPY",
+   "cap": "AUD/NZD",
    "huong": "MUA",
-   "chenh": 1.0,
-   "du_nguong": true,
+   "chenh": 0.32,
+   "du_nguong": false,
    "trang_thai": "Chưa có mô hình đảo chiều"
-  },
-  {
-   "cap": "CAD/JPY",
-   "huong": "MUA",
-   "chenh": 0.95,
-   "du_nguong": true,
-   "trang_thai": "Chưa có mô hình đảo chiều"
-  },
-  {
-   "cap": "GBP/JPY",
-   "huong": "MUA",
-   "chenh": 0.94,
-   "du_nguong": true,
-   "trang_thai": "Chưa có mô hình đảo chiều"
-  },
-  {
-   "cap": "USD/CHF",
-   "huong": "BÁN",
-   "chenh": 0.79,
-   "du_nguong": true,
-   "trang_thai": "Chưa có mô hình đảo chiều",
-   "tin": "USD 20:30"
   },
   {
    "cap": "AUD/CHF",
+   "huong": "MUA",
+   "chenh": 0.27,
+   "du_nguong": false,
+   "trang_thai": "búa + quét đáy"
+  },
+  {
+   "cap": "EUR/AUD",
    "huong": "BÁN",
-   "chenh": 0.58,
-   "du_nguong": true,
-   "trang_thai": "Chưa có mô hình đảo chiều",
-   "tin": "AUD 07:30"
+   "chenh": 0.26,
+   "du_nguong": false,
+   "trang_thai": "Chưa có mô hình đảo chiều"
+  },
+  {
+   "cap": "NZD/CAD",
+   "huong": "BÁN",
+   "chenh": 0.1,
+   "du_nguong": false,
+   "trang_thai": "Chưa có mô hình đảo chiều"
+  },
+  {
+   "cap": "NZD/JPY",
+   "huong": "BÁN",
+   "chenh": 0.1,
+   "du_nguong": false,
+   "trang_thai": "Chưa có mô hình đảo chiều"
   }
  ],
  "canh_bao": [],
@@ -100,7 +98,7 @@
    "ten": "Chỉ số giá tiêu dùng (lạm phát) (so với tháng trước)",
    "du_bao": "0.4%",
    "ky_truoc": "0.8%",
-   "da_ra": false
+   "da_ra": true
   },
   {
    "gio": "07:30",
@@ -108,7 +106,7 @@
    "ten": "Chỉ số giá tiêu dùng (lạm phát) (so với cùng kỳ năm trước)",
    "du_bao": "4.7%",
    "ky_truoc": "4.3%",
-   "da_ra": false
+   "da_ra": true
   },
   {
    "gio": "07:30",
@@ -116,7 +114,7 @@
    "ten": "Chỉ số giá tiêu dùng (lạm phát) (so với tháng trước)",
    "du_bao": "0.3%",
    "ky_truoc": "0.3%",
-   "da_ra": false
+   "da_ra": true
   },
   {
    "gio": "20:30",
