@@ -1,7 +1,7 @@
 {
- "cap_nhat": "12:05 25/11/2026",
- "nen_4_gio_dong": "09:00 25/11",
- "ma_nen": 1795572000,
+ "cap_nhat": "13:05 25/11/2026",
+ "nen_4_gio_dong": "13:00 25/11",
+ "ma_nen": 1795586400,
  "so_cap_doc_duoc": 28,
  "cach_do": "từ giá mở cửa ngày",
  "nguong": {
@@ -15,35 +15,35 @@
  "suc_manh": [
   {
    "tien": "USD",
-   "phan_tram": 0.23
+   "phan_tram": 0.27
   },
   {
    "tien": "CAD",
-   "phan_tram": 0.16
+   "phan_tram": 0.19
   },
   {
    "tien": "JPY",
-   "phan_tram": 0.14
+   "phan_tram": 0.13
   },
   {
    "tien": "CHF",
-   "phan_tram": 0.12
+   "phan_tram": 0.13
   },
   {
    "tien": "EUR",
-   "phan_tram": 0.04
-  },
-  {
-   "tien": "GBP",
    "phan_tram": 0.03
   },
   {
+   "tien": "GBP",
+   "phan_tram": 0.02
+  },
+  {
    "tien": "NZD",
-   "phan_tram": -0.11
+   "phan_tram": -0.16
   },
   {
    "tien": "AUD",
-   "phan_tram": -0.61
+   "phan_tram": -0.59
   }
  ],
  "dat": [
@@ -54,19 +54,12 @@
    "huong": "BÁN",
    "mo_hinh": "sao băng + quét đỉnh + phá giả nến mẹ",
    "gio_nen": "09:00 25/11",
-   "chenh": 0.84,
-   "gia": 0.65928,
+   "chenh": 0.86,
+   "gia": 0.65907,
    "cat_lo": 0.66648,
-   "muc_tieu": 0.64488,
+   "muc_tieu": 0.64423,
    "loi_lo": 2.0,
    "nen": [
-    [
-     1794794400,
-     0.67806,
-     0.67806,
-     0.67609,
-     0.67686
-    ],
     [
      1794808800,
      0.67705,
@@ -281,7 +274,7 @@
      1795399200,
      0.66432,
      0.66534,
-     0.6637,
+     0.66388,
      0.6645
     ],
     [
@@ -366,17 +359,24 @@
      0.66401,
      0.66627,
      0.66339,
-     0.66379
+     0.66397
     ],
     [
      1795586400,
-     0.66379,
      0.66392,
-     0.65928,
-     0.65928
+     0.66392,
+     0.65911,
+     0.65924
+    ],
+    [
+     1795600800,
+     0.65907,
+     0.65907,
+     0.65907,
+     0.65907
     ]
    ],
-   "chi_so_mh": 43,
+   "chi_so_mh": 42,
    "so_le": 5,
    "so_nen_mh": 3,
    "h1": "Nhấn chìm giảm khung 1 giờ (nến đóng 23:00 24/11)",
@@ -389,26 +389,19 @@
    "huong": "BÁN",
    "mo_hinh": "sao băng + quét đỉnh + phá giả nến mẹ",
    "gio_nen": "09:00 25/11",
-   "chenh": 0.75,
-   "gia": 105.016,
+   "chenh": 0.73,
+   "gia": 105.035,
    "cat_lo": 106.223,
    "muc_tieu": 104.717,
-   "loi_lo": 0.2,
+   "loi_lo": 0.3,
    "gia_cho": 105.62,
    "nen": [
-    [
-     1794794400,
-     108.311,
-     108.337,
-     107.949,
-     108.04
-    ],
     [
      1794808800,
      108.04,
      108.211,
      107.578,
-     107.695
+     107.701
     ],
     [
      1794823200,
@@ -617,7 +610,7 @@
      1795399200,
      105.54,
      105.69,
-     105.375,
+     105.377,
      105.541
     ],
     [
@@ -706,13 +699,20 @@
     ],
     [
      1795586400,
-     105.7,
+     105.701,
      105.734,
-     104.996,
-     105.016
+     104.97,
+     105.043
+    ],
+    [
+     1795600800,
+     105.044,
+     105.09,
+     105.012,
+     105.035
     ]
    ],
-   "chi_so_mh": 43,
+   "chi_so_mh": 42,
    "so_le": 3,
    "so_nen_mh": 3
   }
@@ -722,7 +722,7 @@
   {
    "cap": "AUD/USD",
    "huong": "BÁN",
-   "chenh": 0.84,
+   "chenh": 0.86,
    "du_nguong": true,
    "trang_thai": "sao băng + quét đỉnh + phá giả nến mẹ",
    "tin": "USD 20:30"
@@ -730,21 +730,21 @@
   {
    "cap": "AUD/CAD",
    "huong": "BÁN",
-   "chenh": 0.76,
+   "chenh": 0.78,
    "du_nguong": true,
    "trang_thai": "Chưa có mô hình đảo chiều"
   },
   {
    "cap": "AUD/JPY",
    "huong": "BÁN",
-   "chenh": 0.75,
+   "chenh": 0.73,
    "du_nguong": true,
    "trang_thai": "sao băng + quét đỉnh + phá giả nến mẹ"
   },
   {
    "cap": "NZD/USD",
    "huong": "BÁN",
-   "chenh": 0.34,
+   "chenh": 0.43,
    "du_nguong": false,
    "trang_thai": "sao hôm",
    "tin": "USD 20:30"
@@ -752,7 +752,7 @@
   {
    "cap": "GBP/USD",
    "huong": "BÁN",
-   "chenh": 0.2,
+   "chenh": 0.25,
    "du_nguong": false,
    "trang_thai": "Chưa có mô hình đảo chiều",
    "tin": "USD 20:30"
